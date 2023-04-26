@@ -1,0 +1,35 @@
+import { MigrationInterface, QueryRunner } from 'typeorm';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export class initial1656331820645 implements MigrationInterface {
+  name = 'initial1656331820645';
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    return Promise.resolve();
+
+    const sqlPath = path.resolve(
+      __dirname,
+      '../../../_db_schema/oems_table_create.sql',
+    );
+
+    const sql = fs
+      .readFileSync(sqlPath, 'utf8')
+      .toString()
+      .split(/\ncreate/);
+
+    for (const i in sql) {
+      const query = sql[i].toString().trim().replace(/--.+\n/g, '\n').replace(/\s+/g, ' ');
+
+      if (!query) continue;
+
+      // console.log(`initial1656331820645 - ${i}`, 'create ' + query);
+
+      await queryRunner.query('create ' + query);
+    }
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    return Promise.resolve();
+  }
+}

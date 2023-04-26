@@ -1,0 +1,39 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:16
+
+pipelines:
+  branches:
+    staging:
+      - step:
+          deployment: staging
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run test:e2e
+            - echo $STAGING_SERVER_IPA
+            # - ssh "ubuntu@$STAGING_SERVER_IPA" "cd /app && /bin/bash deploy.sh"
+    mock:
+     - step:
+         deployment: mock
+         caches:
+           - node
+         script:
+           - npm install
+           - npm run test:e2e
+           - echo $MOCK_SERVER_IPA
+           # - ssh "ubuntu@$MOCK_SERVER_IPA" "cd /app && /bin/bash deploy.sh"
+    master:
+      - step:
+          deployment: production
+          caches:
+            - node
+          script:
+            - npm install
+            - npm run test:e2e
+            - echo $PRODUCTION_SERVER_IPA
+            # - ssh "ubuntu@$PRODUCTION_SERVER_IPA" "cd /app && /bin/bash deploy.sh"

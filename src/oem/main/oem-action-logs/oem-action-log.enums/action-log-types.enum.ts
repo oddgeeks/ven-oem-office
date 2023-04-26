@@ -1,0 +1,16 @@
+export enum ActionLogTypeEnum {
+  VENDO = 'Vendo',
+  QUOTE = 'Quote',
+  ROLE = 'Role',
+  MATERIAL = 'Material',
+  ADDRESS = 'Address',
+  USER = 'User',
+  SHADING_RULES = 'ShadingRule',
+  WORKFLOW_RULES = 'WorkflowRule',
+  COMPANY_CHANNELS = 'CompanyChannel',
+  COMPANY = 'Company',
+  DISCOUNT_RULES = 'DiscountRule',
+  DISCOUNT = 'Discount',
+  PRODUCT_RELATIONSHIPS = 'ProductsRelationships',
+  PRICING_RULES = 'PricingModel',
+}

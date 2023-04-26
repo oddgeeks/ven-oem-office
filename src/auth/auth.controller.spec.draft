@@ -1,0 +1,175 @@
+import { build, fake, perBuild, sequence } from '@jackfranklin/test-data-bot';
+import { JwtModule } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { mock } from 'jest-mock-extended';
+import { Repository } from 'typeorm';
+
+import { OemUserEntity, User } from '../oem/oem-users/oem-user.entity';
+import { OemUsersService } from '../oem/oem-users/oem-users.service';
+
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import * as bcrypt from 'bcryptjs';
+
+export class MockRepository<T> {
+  public createQueryBuilder = jest.fn(() => this.queryBuilder);
+
+  public manager = { transaction: (a) => Promise.resolve(a()) };
+  public metadata = {
+    connection: { options: { type: null } },
+    columns: [],
+    relations: [],
+  };
+
+  public save = jest.fn();
+  public delete = jest.fn();
+  public update = jest.fn();
+  public findOne = jest.fn();
+  public findOneOrFail = jest.fn();
+  public find = jest.fn();
+  public getMany = jest.fn();
+
+  public queryBuilder = {
+    offset: jest.fn().mockReturnThis(),
+    take: jest.fn().mockReturnThis(),
+    orderBy: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: jest.fn().mockReturnThis(),
+    from: jest.fn().mockReturnThis(),
+    addFrom: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    andWhere: jest.fn().mockReturnThis(),
+    innerJoinAndSelect: jest.fn().mockReturnThis(),
+    leftJoinAndSelect: jest.fn().mockReturnThis(),
+    getManyAndCount: jest.fn(),
+    getMany: jest.fn(),
+    getOne: jest.fn(),
+    delete: jest.fn().mockReturnThis(),
+    execute: jest.fn().mockReturnThis(),
+  };
+}
+const userBuilder = build<Partial<User>>({
+  fields: {
+    userId: sequence(),
+    companyId: 1,
+    firstName: fake((f) => f.name.firstName()),
+    roleId: 1,
+    organizationId: 'SF.129hfnf',
+    prePopulatedFields: [
+      'Full Name',
+    ],
+    imageUrl: 'http://images.vendori.com/file.png',
+    lastName: fake((f) => f.name.lastName()),
+    notificationEmail: fake((f) => f.internet.email()),
+    ssoLoginEmail: fake((f) => f.internet.email()),
+    password: fake((f) => f.datatype.string(8)),
+    phone: fake((f) => f.phone),
+    isExternal: fake((f) => f.datatype.boolean()),
+    region: 'New York',
+    timeZoneArea: 'US/Pacific',
+    isHideWelcomeText: fake((f) => f.datatype.boolean()),
+    isActive: fake((f) => f.datatype.boolean()),
+    createdAt: perBuild(() => new Date()),
+    updatedAt: perBuild(() => new Date()),
+  },
+  postBuild: (u) => new User(u),
+});
+
+describe('Auth Controller', () => {
+  let controller: AuthController;
+  let oemUsersService: OemUsersService;
+  const repositoryMock = new MockRepository<OemUserEntity>();
+  const OLD_ENV = process.env;
+
+  beforeEach(async () => {
+    jest.resetModules(); // Most important - it clears the cache
+    process.env = { ...OLD_ENV };
+    process.env.OKTA_CLIENTID = 'eqweewqewqewqeq';
+    process.env.OKTA_ISSUER = 'https://dev-12345678.okta.com/oauth2/default';
+    process.env.OKTA_AUDIENCE = 'api://default';
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [AuthController],
+      providers: [
+        AuthService,
+        OemUsersService,
+        {
+          provide: getRepositoryToken(OemUserEntity),
+          useValue: repositoryMock,
+        },
+      ],
+      imports: [JwtModule.register({ secret: process.env.APP_SECRET })],
+    }).compile();
+
+    controller = module.get<AuthController>(AuthController);
+    oemUsersService = module.get<OemUsersService>(OemUsersService);
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV; // Restore old environment
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  it('should register a new user', async () => {
+    const register = {
+      companyId: 1,
+      geoHierarchyId: 1,
+      roleId: 1,
+      organizationId: 'SF.129hfnf',
+      prePopulatedFields: ['Full Name'],
+      imageUrl: 'http://images.vendori.com/file.png',
+      firstName: 'John',
+      lastName: 'Doe',
+      notificationEmail: 'john.smith@citrix.com',
+      ssoLoginEmail: 'john.smith5@citrix.com',
+      password: await hashPassword('P2swsworfd'),
+      phone: '+431786321123',
+      region: 'New York',
+      timeZoneArea: 'US/Pacific',
+      isExternal: true as unknown as boolean,
+      isHideWelcomeText: true as unknown as boolean,
+      isActive: true as unknown as boolean,
+    };
+
+    async function hashPassword(password) {
+      const salt = await bcrypt.genSalt();
+      if (!/^\$2a\$\d+\$/.test(password)) {
+        password = await bcrypt.hash(password, salt);
+      }
+      return password;
+    }
+
+    await expect(controller.register(register)).resolves.not.toHaveProperty(
+      'password',
+    );
+  });
+
+  it('should log in an user', async () => {
+    const user = userBuilder({
+      overrides: {
+        password: 'P2swsworfd',
+        ssoLoginEmail: 'john.smith5@citrix.com',
+      },
+    });
+
+    await expect(controller.login(user as User)).resolves.not.toHaveProperty(
+      'password',
+    );
+  });
+
+  it('should got me logged', () => {
+    const user = userBuilder({
+      overrides: {
+        firstName: 'John',
+        lastName: 'Doe',
+        ssoLoginEmail: 'john@doe.me',
+      },
+    });
+
+    expect(controller.me(user as User)).toEqual(user);
+  });
+});

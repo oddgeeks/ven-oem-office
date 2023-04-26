@@ -1,0 +1,8 @@
+export const EVEN_PAGE_BORDER_TOP_RADIUS = 16;
+export const EVEN_PAGE_BORDER_BOTTOM_RADIUS = 2;
+
+export const ODD_PAGE_BORDER_TOP_RADIUS = 2;
+export const ODD_PAGE_BORDER_BOTTOM_RADIUS = 16;
+
+export const CONTAINER_X_MARGIN = 25;
+export const CONTAINER_Y_MARGIN = 35;

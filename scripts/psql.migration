@@ -1,0 +1,7 @@
+psql oems < db_create.sql
+psql oems < schema_create.sql
+psql oems < oems_table_create.sql
+
+typeorm-model-generator -h localhost -d oems -u postgres -e postgres -o . -s oem
+
+node ./generateOpenAPIInterfaces.ts --openApiPath='./openapi.json' --interfacesPath='./interfaces'

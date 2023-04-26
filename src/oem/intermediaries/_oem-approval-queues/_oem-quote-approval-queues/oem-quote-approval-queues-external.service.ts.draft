@@ -1,0 +1,101 @@
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { CommonDefaultMethodExtension } from '../../../../common/decorators/common-default-method-extention.decorator';
+import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { OemQuoteApprovalQueue } from './oem-quote-approval-queue.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { OemUserEntity } from '../../../main/oem-users/oem-user.entity';
+import { QuoteApprovalQueueTargetTypeEnum } from './oem-quote-approval-queue.enums/quote-approval-queue-target-type.enum';
+import { OemQuotesExternalUsers } from '../../_oem-quotes-external-users/oem-quotes-external-users.entity';
+import { OemQuoteApprovalQueueCreateDto } from './oem-quote-approval-queue.dto/oem-quote-approval-queue.create.dto';
+import { OemApprovalQueuePriority } from '../../../main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
+import * as moment from 'moment-timezone';
+import { OemQuoteApprovalQueuesService } from './oem-quote-approval-queues.service';
+
+//TODO: we need to run sql request by bulk, instead of using for in
+@Injectable()
+@CommonDefaultMethodExtension
+export class OemQuoteApprovalQueuesExternalService extends TypeOrmCrudService<OemQuoteApprovalQueue> {
+  private readonly logger = new Logger(OemQuoteApprovalQueuesService.name);
+
+  constructor(
+    @InjectRepository(OemQuoteApprovalQueue)
+    public repo: Repository<OemQuoteApprovalQueue>,
+    @Inject(OemQuoteApprovalQueuesExternalService)
+    public quoteApprovalQueuesService: OemQuoteApprovalQueuesService,
+  ) {
+    super(repo);
+  }
+
+  async create(
+    dto: Partial<OemQuoteApprovalQueueCreateDto>,
+    manager: EntityManager,
+  ) {
+    const user = await manager.findOne(OemUserEntity, {
+      where: {
+        userId: dto.userId,
+      },
+    });
+
+    const approvalQueuePriority =
+      user &&
+      (await manager.findOne(OemApprovalQueuePriority, {
+        where: {
+          roleId: user.roleId,
+        },
+      }));
+
+    const now = moment.utc();
+    const expiresAt =
+      (dto.expiresAt && new Date(dto.expiresAt)) ||
+      now.clone().add(1, 'month').toDate();
+
+    const quoteApprovalQueue = await manager.save(
+      this.repo.create({
+        ...dto,
+        approvalQueuePriorityId: approvalQueuePriority?.approvalQueuePriorityId,
+        expiresAt,
+      }),
+    );
+
+    quoteApprovalQueue.token = await this.quoteApprovalQueuesService.getToken(
+      quoteApprovalQueue.quoteApprovalQueueId,
+      expiresAt,
+      now,
+    );
+
+    return manager.save(quoteApprovalQueue);
+  }
+
+  private async _createExternalQuoteApprovalQueues(
+    data: { quoteId: number; externalUsers?: Array<OemUserEntity> },
+    targetTypes: Array<QuoteApprovalQueueTargetTypeEnum>,
+    manager: EntityManager,
+  ) {
+    // create new external quote approval queues
+    const quoteUsers = await manager.find(OemQuotesExternalUsers, {
+      where: {
+        isEnabled: true,
+        isSavedAlertUser: false,
+        quoteId: data.quoteId,
+      },
+      relations: ['user'],
+    });
+
+    for (const quoteUser of quoteUsers) {
+      const targetType = quoteUser.isApprover
+        ? QuoteApprovalQueueTargetTypeEnum.CUSTOMER
+        : QuoteApprovalQueueTargetTypeEnum.EXTERNAL;
+
+      await this.create(
+        {
+          companyId: quoteUser.companyId,
+          quoteId: quoteUser.quoteId,
+          externalUserId: quoteUser.externalUserId,
+          targetType: targetType,
+        },
+        manager,
+      );
+    }
+  }
+}
