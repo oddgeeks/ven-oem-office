@@ -1,14 +1,15 @@
 import { OmitType } from '@nestjs/swagger';
 import { OemSalesforceIntegrationDto } from './oem-salesforce-integration.dto';
-import { Exclude } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class SalesforceIntegrationSerializeDto extends OmitType(
   OemSalesforceIntegrationDto,
-  ['salesforceClientSecret', 'salesforcePassword', 'isEnabled'] as const,
+  ['isEnabled'] as const,
 ) {
-  @Exclude()
+  @Transform(({ value }) => `•••• •••• ${value.slice(-4)}`)
   salesforceClientSecret: string;
-  @Exclude()
+
+  @Transform(({ value }) => `•••• •••• ${value.slice(-4)}`)
   salesforcePassword: string;
 }
 

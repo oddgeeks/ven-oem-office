@@ -22,6 +22,7 @@ import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
   },
   query: {
     alwaysPaginate: true,
+    limit: 50, // Default limit when it is not provided
   },
   routes: {
     only: ['getOneBase', 'getManyBase'],

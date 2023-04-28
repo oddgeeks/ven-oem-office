@@ -11,7 +11,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString,
+  IsString, Matches,
   MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -52,18 +52,20 @@ export class ContactDto {
    * The fisrt name
    * @example Mike
    */
-  @IsString()
-  @IsAlpha()
-  @MaxLength(32)
+  @Matches(/^[A-Za-z0-9\-\'\.]+$/, {
+    message: `Value should contain alphanumeric characters and these three symbols - ' and .`,
+  })
+  @MaxLength(128)
   lastName: string;
 
   /**
    * The name of Job
    * @example Fast
    */
-  @IsString()
-  @IsAlpha()
-  @MaxLength(32)
+  @Matches(/^[A-Za-z0-9\-\'\.]+$/, {
+    message: `Value should contain alphanumeric characters and these three symbols - ' and .`,
+  })
+  @MaxLength(128)
   firstName: string;
 
   /**

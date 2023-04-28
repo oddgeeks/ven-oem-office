@@ -111,7 +111,7 @@ export class Product extends OemProductBaseEntity {
   pricingModel: OemPricingModelEntity;
 
   @OneToMany(() => OemPriceTierEntity, (oemPriceTiers) => oemPriceTiers.product)
-  priceTiers: OemPriceTierEntity[];
+  priceTiers: [];
 }
 
 export { Product as OemProductEntity };

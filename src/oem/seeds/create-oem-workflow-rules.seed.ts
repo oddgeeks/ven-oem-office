@@ -1,5 +1,5 @@
 import { Factory, Seeder } from 'typeorm-seeding';
-import { OemWorkflowRule } from '../main/oem-workflow-rules/oem-workflow-rule.entity';
+import { OemWorkflowRule } from '../main/oem-rules/oem-workflow-rules/oem-workflow-rule.entity';
 import { Connection } from 'typeorm';
 
 export default class CreateOemWorkflowRules implements Seeder {

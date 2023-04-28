@@ -16,18 +16,18 @@ import {
 } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import { OemAddressSerializeDto } from '../oem/main/oem-addresses/oem-address.dto/oem-address.serialize.dto';
-import { setup } from '../setup';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import { OemAddressSerializeDto } from '../../src/oem/main/oem-addresses/oem-address.dto/oem-address.serialize.dto';
+import { setup } from '../../src/setup';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 import { initPolicy } from '../test.utils/init-policy.util';
 
 describe('AddressesController (e2e)', () => {

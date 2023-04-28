@@ -4,34 +4,34 @@ import * as request from 'supertest';
 import { getConnection, getConnectionManager } from 'typeorm';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
 
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemContacts from '../oem/seeds/create-oem-contacts.seed';
-import CreateOemQuotes from '../oem/seeds/create-oem-quotes.seed';
-import CreateOemDiscountListPrices from '../oem/seeds/create-oem-visible-product-fields.seed';
-import CreateOemDiscountRules from '../oem/seeds/create-oem-discount-rules.seed';
-import { OemDiscountEntity } from '../oem/main/oem-discounts/oem-discount.entity';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemContacts from '../../src/oem/seeds/create-oem-contacts.seed';
+import CreateOemQuotes from '../../src/oem/seeds/create-oem-quotes.seed';
+import CreateOemDiscountListPrices from '../../src/oem/seeds/create-oem-visible-product-fields.seed';
+import CreateOemDiscountRules from '../../src/oem/seeds/create-oem-discount-rules.seed';
+import { OemDiscountEntity } from '../../src/oem/main/oem-discounts/oem-discount.entity';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import { enable } from 'async-local-storage';
-import { OemDiscountSerializeDto } from '../oem/main/oem-discounts/oem-discount.dto/oem-discount.serialize.dto';
+import { OemDiscountSerializeDto } from '../../src/oem/main/oem-discounts/oem-discount.dto/oem-discount.serialize.dto';
 import { initTestDescription } from '../test.utils/init-test.util';
 import { METHODS } from '../test.enums/methods.enum';
-import { initDefer } from '../utils/init-defer.util';
+import { initDefer } from '../../src/utils/init-defer.util';
 import { getMetaData } from '../test.utils/get-metadata.util';
-import { ActionLogTypeEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
-import { ActionsEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
+import { ActionLogTypeEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
+import { ActionsEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
 
 enable();
 

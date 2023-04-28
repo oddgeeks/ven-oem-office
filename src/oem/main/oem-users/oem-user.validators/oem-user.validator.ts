@@ -36,6 +36,7 @@ export class IsUserEnabled implements ValidatorConstraintInterface {
 
 @ValidatorConstraint({ name: 'isUserEmailAlreadyExist', async: true })
 @Injectable()
+// this decorator wrap defaultMessage by promise, that's why error messaging doesn't work
 @SetCurrentTenant
 export class IsUserEmailAlreadyExist implements ValidatorConstraintInterface {
   constructor(

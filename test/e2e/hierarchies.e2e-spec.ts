@@ -14,21 +14,21 @@ import {
 import { Connection } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import { OemHierarchyEntity } from '../oem/main/oem-hierarchies/oem-hierarchy.entity';
-import { OemHierarchySerializeDto } from '../oem/main/oem-hierarchies/oem-hierarchy.dto/oem-hierarchy.serialize.dto';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import { OemHierarchyLevelEntity } from '../oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import { OemHierarchyEntity } from '../../src/oem/main/oem-hierarchies/oem-hierarchy.entity';
+import { OemHierarchySerializeDto } from '../../src/oem/main/oem-hierarchies/oem-hierarchy.dto/oem-hierarchy.serialize.dto';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import { OemHierarchyLevelEntity } from '../../src/oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
 import { initPolicy } from '../test.utils/init-policy.util';

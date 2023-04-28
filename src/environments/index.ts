@@ -68,10 +68,19 @@ export const redis = {
   enableReadyCheck: false,
   reconnectOnError: (err: any) => {
     // https://github.com/luin/ioredis#reconnect-on-error
-    if (err && err.message && err.message.includes('READONLY')) {
-      return true;
-    }
+    if (err && err.message && err.message.includes('READONLY')) return true;
 
     return false;
   },
 };
+
+export const subdomain =
+  NODE_ENV === 'production'
+    ? 'app'
+    : NODE_ENV === 'staging'
+    ? 'staging'
+    : NODE_ENV === 'mock'
+    ? 'mock'
+    : NODE_ENV === 'demo'
+    ? 'demo'
+    : 'app';

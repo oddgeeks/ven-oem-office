@@ -1,7 +1,7 @@
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
-import { OemDiscountRuleEntity } from '../../main/oem-discount-rules/oem-discount-rule.entity';
-import { DiscountRuleTypeEnum } from '../../main/oem-discount-rules/oem-discount-rule.enums/discount-rule.enum';
+import { OemDiscountRuleEntity } from '../../main/oem-rules/oem-discount-rules/oem-discount-rule.entity';
+import { DiscountRuleTypeEnum } from '../../main/oem-rules/oem-discount-rules/oem-discount-rule.enums/discount-rule.enum';
 import { seedEntities } from '../../../utils/seed-factory.util';
 
 export default ({ companyId = 1 }: { companyId?: number }) =>

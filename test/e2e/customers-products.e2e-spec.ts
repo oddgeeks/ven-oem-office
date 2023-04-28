@@ -14,42 +14,42 @@ import {
 import { Connection } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { OemRoleEntity } from '../oem/main/oem-roles/oem-role.entity';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { OemRoleEntity } from '../../src/oem/main/oem-roles/oem-role.entity';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import { OemCustomerEntity } from '../oem/main/oem-customers/oem-customer.entity';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import { OemHierarchyEntity } from '../oem/main/oem-hierarchies/oem-hierarchy.entity';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import { OemHierarchyLevelEntity } from '../oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
-import { OemQuotesContacts } from '../oem/intermediaries/_oem-quotes-contacts/oem-quotes-contacts.entity';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import { OemLicensingProgramEntity } from '../oem/main/oem-licensing-programs/oem-licensing-program.entity';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import { OemCustomerEntity } from '../../src/oem/main/oem-customers/oem-customer.entity';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import { OemHierarchyEntity } from '../../src/oem/main/oem-hierarchies/oem-hierarchy.entity';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import { OemHierarchyLevelEntity } from '../../src/oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
+import { OemQuotesContacts } from '../../src/oem/intermediaries/_oem-quotes-contacts/oem-quotes-contacts.entity';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import { OemLicensingProgramEntity } from '../../src/oem/main/oem-licensing-programs/oem-licensing-program.entity';
 
-import { OemProductEntity } from '../oem/main/oem-products/oem-product.entity';
-import CreateOemProducts from '../oem/seeds/create-oem-products.seed';
-import CreateOemPricingModels from '../oem/seeds/create-oem-pricing-models.seed';
-import CreateOemPriceTiers from '../oem/seeds/create-oem-price-tiers.seed';
-import { OemPriceTierEntity } from '../oem/main/oem-price-tiers/oem-price-tier.entity';
-import { OemPricingModelEntity } from '../oem/main/oem-pricing-models/oem-pricing-model.entity';
-import CreateOemUnitTiers from '../oem/seeds/create-oem-unit-tiers.seed';
-import { OemUnitTierEntity } from '../oem/main/oem-unit-tiers/oem-unit-tier.entity';
+import { OemProductEntity } from '../../src/oem/main/oem-products/oem-product.entity';
+import CreateOemProducts from '../../src/oem/seeds/create-oem-products.seed';
+import CreateOemPricingModels from '../../src/oem/seeds/create-oem-pricing-models.seed';
+import CreateOemPriceTiers from '../../src/oem/seeds/create-oem-price-tiers.seed';
+import { OemPriceTierEntity } from '../../src/oem/main/oem-price-tiers/oem-price-tier.entity';
+import { OemPricingModelEntity } from '../../src/oem/main/oem-pricing-models/oem-pricing-model.entity';
+import CreateOemUnitTiers from '../../src/oem/seeds/create-oem-unit-tiers.seed';
+import { OemUnitTierEntity } from '../../src/oem/main/oem-unit-tiers/oem-unit-tier.entity';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
 import { initPolicy } from '../test.utils/init-policy.util';
 import { enable } from 'async-local-storage';
-import { OemBundleEntity } from '../oem/main/oem-bundles/oem-bundle.entity';
+import { OemBundleEntity } from '../../src/oem/main/oem-bundles/oem-bundle.entity';
 enable();
 
 describe('CustomersProductsController (e2e)', () => {
@@ -185,7 +185,11 @@ describe('CustomersProductsController (e2e)', () => {
       return request(server)
         [method](PATH + '/' + relationModelData[`${RELATION_MODEL}Id`])
         .set('Origin', 'demo.localhost')
-        .send({ ...comparedData, bundleId: bundle['bundleId'], productId: null })
+        .send({
+          ...comparedData,
+          bundleId: bundle['bundleId'],
+          productId: null,
+        })
         .end((_, res) => {
           console.debug(res.body);
           expect(res.status).toBe(getMetaData(method).expectedStatus);
@@ -224,7 +228,6 @@ describe('CustomersProductsController (e2e)', () => {
         });
     });
   });
-
 
   describe(`${METHODS.GET.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.GET;

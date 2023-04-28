@@ -6,6 +6,7 @@ import { QuotesProductsDto } from './oem-quotes-products.dto';
 export class QuotesProductsUpdateDto extends OmitType(QuotesProductsDto, [
   'productId',
   'bundleId',
+  'quoteId',
   'endDate',
   'companyId',
 ] as const) {

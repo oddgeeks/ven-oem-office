@@ -7,18 +7,18 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { runSeeder, useSeeding } from 'typeorm-seeding';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 import { initPolicy } from '../test.utils/init-policy.util';
-import { clearDB } from '../utils/clear-db.util';
+import { clearDB } from '../../src/utils/clear-db.util';
 
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { RoleTypeEnum } from '../oem/main/oem-roles/oem-role.enums/role-type.enum';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import CreateOemCompanies from '../oem/seeds/demo/create-demo-oem-companies.seed';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { RoleTypeEnum } from '../../src/oem/main/oem-roles/oem-role.enums/role-type.enum';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import CreateOemCompanies from '../../src/oem/seeds/demo/create-demo-oem-companies.seed';
 
 describe('SettingsController (e2e)', () => {
   const logger = new Logger('OemSettingsService');

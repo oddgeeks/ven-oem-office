@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { OemDiscountRuleEntity } from '../../main/oem-discount-rules/oem-discount-rule.entity';
+import { OemDiscountRuleEntity } from '../../main/oem-rules/oem-discount-rules/oem-discount-rule.entity';
 import { OemDiscountEntity } from '../../main/oem-discounts/oem-discount.entity';
 import { DB_MAIN_DATABASE as DB_NAME } from '../../../environments';
 

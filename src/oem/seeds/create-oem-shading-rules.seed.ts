@@ -1,5 +1,5 @@
 import { Factory, Seeder } from 'typeorm-seeding';
-import { OemShadingRule } from '../main/oem-shading-rules/oem-shading-rule.entity';
+import { OemShadingRule } from '../main/oem-rules/oem-shading-rules/oem-shading-rule.entity';
 import { Connection } from 'typeorm';
 
 export default class CreateOemShadingRulesSeed implements Seeder {

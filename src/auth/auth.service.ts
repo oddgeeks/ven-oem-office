@@ -1,5 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Issuer } from 'openid-client';
 
 import { OemUserEntity, User } from '../oem/main/oem-users/oem-user.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -19,8 +20,11 @@ import {
   VENDORI_SUPPORT_EMAIL,
 } from '../environments';
 import { sendGridEmailWithDynamicTemplate } from '../shared/email';
-// import { SetCurrentTenant } from '../oem/tenants/tenants.decorators/set-current-tenant.decorator';
+import { SetCurrentTenant } from '../common/decorators/set-current-tenant.decorator';
+import { TenantsService } from '../shared/tenants/tenants.service';
 // import { InjectConnection } from '@nestjs/typeorm';
+import { EventDispatcher } from '../common/decorators/event-dispatcher.decorator';
+import { EventsEnum } from '../shared/event-handler/event.enum/events.enum';
 
 //TODO: seems like a it requires a little refactoring
 @Injectable()
@@ -30,7 +34,6 @@ export class AuthService {
   private audience: string;
 
   constructor(
-    // @InjectConnection('MASTER_CONNECTION')
     @InjectRepository(OemCompanyEntity)
     private readonly company: Repository<OemCompanyEntity>,
     @Inject(OemUsersService)
@@ -39,6 +42,8 @@ export class AuthService {
     private readonly hierarchyService: OemHierarchiesService,
     @Inject(JwtService)
     private readonly jwtService: JwtService,
+    @Inject(TenantsService)
+    private readonly tenantsService: TenantsService,
   ) {
     this.oktaVerifier = new OktaJwtVerifier({
       issuer: process.env.OKTA_ISSUER,
@@ -242,22 +247,56 @@ export class AuthService {
   async verifyPayload(payload: Partial<JwtPayload>): Promise<OemUserEntity> {
     let user: OemUserEntity;
 
+    const tenant = await this.tenantsService.getTenantFromNamespace();
+    const getCompanyId = () =>
+      tenant?.tenantId !== null ? { companyId: tenant?.tenantId } : {};
+    console.log('Verifying payload', {
+      payload,
+      tenant,
+      where: [
+        {
+          ...getCompanyId(),
+          ssoLoginEmail: payload.username,
+          isEnabled: true,
+          isActive: true,
+          // isExternal: false,
+        },
+        {
+          ...getCompanyId(),
+          ssoLoginEmail: ILike(`%${payload.username}%`),
+          isEnabled: true,
+          isActive: true,
+          isExternal: false,
+        },
+        {
+          ...getCompanyId(),
+          notificationEmail: ILike(`%${payload.username}%`),
+          isEnabled: true,
+          isActive: true,
+          isExternal: false,
+        },
+      ],
+    });
+
     try {
       user = await this.userService.repo.findOne({
         where: [
           {
+            ...getCompanyId(),
             ssoLoginEmail: payload.username,
             isEnabled: true,
             isActive: true,
             // isExternal: false,
           },
           {
+            ...getCompanyId(),
             ssoLoginEmail: ILike(`%${payload.username}%`),
             isEnabled: true,
             isActive: true,
             isExternal: false,
           },
           {
+            ...getCompanyId(),
             notificationEmail: ILike(`%${payload.username}%`),
             isEnabled: true,
             isActive: true,
@@ -320,11 +359,56 @@ export class AuthService {
   async loginUser(user: any) {
     const payload = {
       username: user.ssoLoginEmail,
-      sub: user.userId,
+      //sub: user.userId,
       id_token: user.id_token,
     };
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  @EventDispatcher(EventsEnum.SESSION_LOGOUT)
+  async logout(req: any, res: any) {
+    const id_token = req.user ? req.user.id_token : undefined;
+
+    try {
+      req.logout((r) => true);
+    } catch (error) {
+      console.error('Logout Failed: ', error);
+    }
+
+    // TODO: Figure out if the user logged in with Okta, Google or Salesforce first, then try to log them out at those service endpoints
+    // Maybe using a session variable like 'type'
+    const TrustIssuer = await Issuer.discover(
+      `${process.env.OKTA_ISSUER}/.well-known/openid-configuration`,
+    );
+
+    let session: any = {};
+
+    try {
+      session = await req.session.destroy(null, (code) => {
+        const end_session_endpoint = TrustIssuer.metadata.end_session_endpoint;
+
+        // console.log(
+        //   end_session_endpoint +
+        //     '&post_logout_redirect_uri=' +
+        //     process.env.OKTA_LOGOUT_REDIRECT_URI +
+        //     (id_token ? '&id_token_hint=' + id_token : ''),
+        // );
+        if (end_session_endpoint)
+          res.redirect(
+            end_session_endpoint +
+              '?post_logout_redirect_uri=' +
+              process.env.OKTA_LOGOUT_REDIRECT_URI +
+              (id_token ? '&id_token_hint=' + id_token : ''),
+          );
+        // else res.redirect('/');
+        return code;
+      });
+    } catch (error) {
+      console.error('Okta Logout Failed: ', error);
+    }
+
+    return { session };
   }
 }

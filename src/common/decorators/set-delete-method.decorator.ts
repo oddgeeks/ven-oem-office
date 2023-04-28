@@ -38,6 +38,7 @@ export function SetDeleteMethod<T extends { new (...args: any[]): any }>(
       }
       return id;
     }
+
     async _deleteEntity(
       exemplar: BaseEntity,
       manager: EntityManager,
@@ -63,12 +64,25 @@ export function SetDeleteMethod<T extends { new (...args: any[]): any }>(
           .map((relation) => relation.inverseEntityMetadata)
           .filter(
             (relation) =>
-              Object.keys(relation.propertiesMap).includes(primaryKey) &&
+              (relation.ownColumns
+                .map((column) => column?.referencedColumn?.propertyPath)
+                .includes(primaryKey) ||
+                Object.keys(relation.propertiesMap).includes(primaryKey)) &&
               Object.keys(relation.propertiesMap).includes('isEnabled'),
           );
         for (const relation of relations) {
+          const foreignKeys = relation.ownColumns.filter(
+            (column) => column?.referencedColumn?.propertyPath === primaryKey,
+          );
           const entities = await manager.find(relation.targetName, {
-            [primaryKey]: deactivatedExemplar[primaryKey],
+            where: [
+              ...foreignKeys.map(
+                (fk) =>
+                  new Object({
+                    [fk.propertyPath]: deactivatedExemplar[primaryKey],
+                  }),
+              ),
+            ],
           });
           const createdEntities = [];
           for (const entity of entities) {

@@ -10,9 +10,9 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import ormConfig from 'oem/config/orm.config';
-import ormConfigMaster from 'oem/config/orm-master.config';
-import { AppModule } from 'app.module';
+import ormConfig from '../src/oem/config/orm.config';
+import ormConfigMaster from '../src/oem/config/orm-master.config';
+import { AppModule } from '../src/app.module';
 /*console.log = function() {}
 console.debug = function() {}
 console.error = function() {}*/

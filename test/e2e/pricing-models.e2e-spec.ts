@@ -6,17 +6,17 @@ import { useContainer } from 'class-validator';
 import { enable } from 'async-local-storage';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemPricingModelEntity } from '../oem/main/oem-pricing-models/oem-pricing-model.entity';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import { OemPricingModelSerializeDto } from '../oem/main/oem-pricing-models/oem-pricing-model.dto/oem-pricing-model.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemPricingModelEntity } from '../../src/oem/main/oem-pricing-models/oem-pricing-model.entity';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import { OemPricingModelSerializeDto } from '../../src/oem/main/oem-pricing-models/oem-pricing-model.dto/oem-pricing-model.serialize.dto';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 enable();

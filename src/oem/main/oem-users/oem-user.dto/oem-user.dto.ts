@@ -134,7 +134,6 @@ export class OemUserDto {
    */
   @MaxLength(256)
   @IsEmail()
-  @IsOptional()
   notificationEmail: string | null;
 
   /**
@@ -143,7 +142,6 @@ export class OemUserDto {
    */
   @MaxLength(256)
   @IsEmail()
-  @IsOptional()
   ssoLoginEmail: string;
 
   /**

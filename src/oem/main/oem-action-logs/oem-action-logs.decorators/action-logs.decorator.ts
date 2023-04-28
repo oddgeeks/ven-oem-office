@@ -8,12 +8,12 @@ import { TenantsService } from '../../../../shared/tenants/tenants.service';
 import { Inject } from '@nestjs/common';
 import { OemQuoteEntity } from '../../oem-quotes/oem-quote.entity';
 import { OemVendoEntity } from '../../oem-vendos/oem-vendo.entity';
-import { OemShadingRule } from '../../oem-shading-rules/oem-shading-rule.entity';
-import { OemWorkflowRule } from '../../oem-workflow-rules/oem-workflow-rule.entity';
+import { OemShadingRule } from '../../oem-rules/oem-shading-rules/oem-shading-rule.entity';
+import { OemWorkflowRule } from '../../oem-rules/oem-workflow-rules/oem-workflow-rule.entity';
 import { OemCompanyChannel } from '../../../intermediaries/_oem-company-channels/oem-company-channel.entity';
 import { OemCompanyEntity } from '../../oem-companies/oem-company.entity';
 import { OemDiscountEntity } from '../../oem-discounts/oem-discount.entity';
-import { OemDiscountRuleEntity } from '../../oem-discount-rules/oem-discount-rule.entity';
+import { OemDiscountRuleEntity } from '../../oem-rules/oem-discount-rules/oem-discount-rule.entity';
 import { OemProductsRelationships } from '../../../intermediaries/_oem-products-relationships/oem-products-relationships.entity';
 import { OemPricingModelEntity } from '../../oem-pricing-models/oem-pricing-model.entity';
 import * as _ from 'lodash';
@@ -136,7 +136,6 @@ export function ActionLogs(
               [req.options.params[param].field]: req.options.params[param].value,
             };
           }*/
-          //console.log(searchCondition)
           oldRes = await this.getOne({
             ...req,
           });

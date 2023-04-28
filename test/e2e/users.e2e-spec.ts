@@ -4,34 +4,37 @@ import * as request from 'supertest';
 import { getConnection, getConnectionManager } from 'typeorm';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { OemRoleEntity } from '../oem/main/oem-roles/oem-role.entity';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemUserSerializeDto } from '../oem/main/oem-users/oem-user.dto/oem-user.serialize.dto';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { OemRoleEntity } from '../../src/oem/main/oem-roles/oem-role.entity';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemUserSerializeDto } from '../../src/oem/main/oem-users/oem-user.dto/oem-user.serialize.dto';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemChannels from '../oem/seeds/create-oem-channels.seed';
-import CreateOemCompanyPrograms from '../oem/seeds/create-oem-company-programs.seed';
-import CreateOemCompanyChannels from '../oem/seeds/create-oem-company-channels.seed';
-import { OemHierarchyLevelEntity } from '../oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
-import { OemHierarchyEntity } from '../oem/main/oem-hierarchies/oem-hierarchy.entity';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemChannels from '../../src/oem/seeds/create-oem-channels.seed';
+import CreateOemCompanyPrograms from '../../src/oem/seeds/create-oem-company-programs.seed';
+import CreateOemCompanyChannels from '../../src/oem/seeds/create-oem-company-channels.seed';
+import { OemHierarchyLevelEntity } from '../../src/oem/main/oem-hierarchy-levels/oem-hierarchy-level.entity';
+import { OemHierarchyEntity } from '../../src/oem/main/oem-hierarchies/oem-hierarchy.entity';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemContacts from '../oem/seeds/create-oem-contacts.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import { OemQuoteEntity } from '../oem/main/oem-quotes/oem-quote.entity';
-import { QuoteStatusEnum } from '../oem/main/oem-quotes/oem-quote.enums/quote-status.enum';
-import CreateOemQuoteCompanyChannels from '../oem/seeds/create-oem-quote-company-channels.seed';
-import CreateOemCompanyChannelSettings from '../oem/seeds/create-oem-company-channel-settings.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemContacts from '../../src/oem/seeds/create-oem-contacts.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import { OemQuoteEntity } from '../../src/oem/main/oem-quotes/oem-quote.entity';
+import { QuoteStatusEnum } from '../../src/oem/main/oem-quotes/oem-quote.enums/quote-status.enum';
+import CreateOemQuoteCompanyChannels from '../../src/oem/seeds/create-oem-quote-company-channels.seed';
+import CreateOemCompanyChannelSettings from '../../src/oem/seeds/create-oem-company-channel-settings.seed';
+import { omit } from 'lodash';
+import { setup } from '../../src/setup';
+import { closeAllConnection } from '../test.utils/close-all-connections.util';
 
 describe('UsersController (e2e)', () => {
   jest.setTimeout(50000);
@@ -43,7 +46,7 @@ describe('UsersController (e2e)', () => {
   let hierarchyLevel: OemHierarchyLevelEntity;
   let hierarchy: OemHierarchyEntity;
   let receivedData: OemUserSerializeDto;
-  let comparedData: OemUserEntity;
+  let comparedData: Partial<OemUserEntity>;
   const EntityClass = OemUserEntity;
   const SerializeClass = OemUserSerializeDto;
   const PATH = '/users';
@@ -94,7 +97,7 @@ describe('UsersController (e2e)', () => {
     await runSeeder(CreateOemLicensingPrograms);
     await runSeeder(CreateOemCompanyChannelSettings(channels));
     await runSeeder(CreateOemCompanyChannels);
-   // await runSeeder(CreateOemQuoteCompanyChannels);
+    // await runSeeder(CreateOemQuoteCompanyChannels);
     hierarchyLevel = await runSeeder(CreateOemHierarchyLevels);
     hierarchy = await runSeeder(CreateOemHierarchies);
     await runSeeder(CreateOemAddresses);
@@ -124,11 +127,8 @@ describe('UsersController (e2e)', () => {
     const moduleFixture: TestingModule = await initModuleFixture().compile();
 
     app = moduleFixture.createNestApplication();
-    useContainer(app, { fallbackOnErrors: true });
-    app.useGlobalInterceptors(new ResponseInterceptor());
-    app.useGlobalFilters(new HttpExceptionFilter());
-    app.useGlobalPipes();
-    comparedData = user;
+    setup(app);
+    comparedData = omit(user, ['companyId', 'isEnabled', 'userId']);
     await app.init();
     server = app.getHttpServer();
     done();
@@ -136,56 +136,11 @@ describe('UsersController (e2e)', () => {
 
   afterAll(async () => {
     await clearDB();
-    //tearDownDatabase() close connection ONLY for last created
-    //await tearDownDatabase();
-    getConnectionManager().connections.map(
-      async (i) => await getConnection(i.name).close(),
-    );
-
+    await closeAllConnection();
     await app.close();
     global.gc && global.gc();
   });
 
-  describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
-    const method = METHODS.POST;
-    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
-      return request(server)
-        [method](PATH)
-        .set('Origin', 'demo.localhost')
-        .send({ ...comparedData })
-        .end((_, res) => {
-          console.debug(res.body);
-          expect(res.status).toBe(getMetaData(method).expectedStatus);
-          expect(res.body.data).toEqual(
-            expect.objectContaining(new SerializeClass(comparedData)),
-          );
-          receivedData = res.body.data;
-          done();
-        });
-    });
-  });
-
-  describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
-    const method = METHODS.POST;
-    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
-      return request(server)
-        [method](PATH)
-        .set('Origin', 'demo.localhost')
-        .send({ ...comparedData, companyOrganisationName: 'Test' })
-        .end((_, res) => {
-          console.debug(res.body);
-          expect(res.status).toBe(getMetaData(method).expectedStatus);
-          expect(res.body.data).toEqual(
-            expect.objectContaining(new SerializeClass(comparedData)),
-          );
-          receivedData = res.body.data;
-          done();
-        });
-    });
-  });
-
-
-  //create user with companyOrganisationName
   describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.POST;
     it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
@@ -197,12 +152,32 @@ describe('UsersController (e2e)', () => {
           console.debug(res.body);
           expect(res.status).toBe(getMetaData(method).expectedStatus);
           expect(res.body.data.companyOrganisationName).toEqual('Test');
+          expect(res.body.data).toEqual(
+            expect.objectContaining(new SerializeClass(comparedData)),
+          );
+          receivedData = res.body.data;
           done();
         });
     });
   });
 
-  /*describe(`${METHODS.GET.toUpperCase()} ${PATH}`, () => {
+  //create user with companyOrganisationName
+  describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
+    const method = METHODS.POST;
+    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
+      return request(server)
+        [method](PATH)
+        .set('Origin', 'demo.localhost')
+        .send({ ...comparedData, companyOrganisationName: 'Test' })
+        .end((_, res) => {
+          console.debug(res.body);
+          expect(res.status).toBe(422);
+          done();
+        });
+    });
+  });
+
+  describe(`${METHODS.GET.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.GET;
     it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
       return request(server)
@@ -252,6 +227,12 @@ describe('UsersController (e2e)', () => {
       });
       comparedData.geoHierarchyId = 2;
       await comparedData.hashPassword();
+      comparedData = omit(comparedData, [
+        'companyId',
+        'isEnabled',
+        'userId',
+        'password',
+      ]);
       const res = await request(server)
         [method](PATH + '/' + receivedData.userId)
         .set('Origin', 'demo.localhost')
@@ -293,5 +274,5 @@ describe('UsersController (e2e)', () => {
       expect(res.status).toBe(getMetaData(method).expectedStatus);
       done();
     });
-  });*/
+  });
 });

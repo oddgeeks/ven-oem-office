@@ -1,11 +1,11 @@
-import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { OemDiscountEntity } from '../oem-discount.entity';
 import { In, Repository } from 'typeorm';
 import { UnprocessableEntityException } from '@nestjs/common';
 
 export function RetroactivelyPriority(bubble = true) {
   const injectDiscountRepo = InjectRepository(OemDiscountEntity);
-  const injectConnection = InjectConnection();
+  const injectConnection = InjectDataSource();
 
   return (
     target: any,

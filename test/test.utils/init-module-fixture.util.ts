@@ -8,7 +8,7 @@ import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 import { DataAccessEnum } from '../../src/oem/main/oem-roles/oem-role.enums/data-access.enum';
 import { CreateAccessEnum } from '../../src/oem/main/oem-roles/oem-role.enums/create-access.enum';
 import { RoleTypeEnum } from '../../src/oem/main/oem-roles/oem-role.enums/role-type.enum';
-import { JWTAuthExternalGuard } from '../../src/auth/guards/jwt-auth-external.guard';
+import { IAuthGuard, Type } from '@nestjs/passport';
 
 enable();
 
@@ -24,8 +24,16 @@ const TEST_USER = {
   },
 };
 
-export default function initModuleFixture(): TestingModuleBuilder {
-  return Test.createTestingModule({
+interface IModuleFixtureOptions {
+  overrideGuards: Array<Type<IAuthGuard>>;
+}
+
+export default function initModuleFixture(
+  options: IModuleFixtureOptions = {
+    overrideGuards: [SessionAuthGuard, JWTAuthGuard],
+  },
+): TestingModuleBuilder {
+  const testingModule = Test.createTestingModule({
     imports: [AppModuleTestConfig],
     controllers: [],
     providers: [Logger],
@@ -34,9 +42,10 @@ export default function initModuleFixture(): TestingModuleBuilder {
     .useValue({
       log: jest.fn(),
       verbose: jest.fn(),
-    })
-    .overrideGuard(SessionAuthGuard)
-    .useValue({
+    });
+
+  options?.overrideGuards.forEach((guard) => {
+    testingModule.overrideGuard(guard).useValue({
       canActivate: (context: ExecutionContext) => {
         const req = context.switchToHttp().getRequest();
         req.user = {
@@ -44,18 +53,11 @@ export default function initModuleFixture(): TestingModuleBuilder {
         };
         return true;
       },
-    })
-    .overrideGuard(JWTAuthGuard)
-    .useValue({
-      canActivate: (context: ExecutionContext) => {
-        const req = context.switchToHttp().getRequest();
-        req.user = {
-          ...TEST_USER,
-        };
-        return true;
-      },
-    })
-   /* .overrideGuard(JWTAuthExternalGuard)
+    });
+  });
+  return testingModule;
+
+  /* .overrideGuard(JWTAuthExternalGuard)
     .useValue({
       canActivate: (context: ExecutionContext) => {
         const req = context.switchToHttp().getRequest();

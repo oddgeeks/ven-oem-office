@@ -5,29 +5,29 @@ import { getConnection, getConnectionManager } from 'typeorm';
 
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemMaterialEntity } from '../oem/main/oem-materials/oem-material.entity';
-import { OemMaterialSerializeDto } from '../oem/main/oem-materials/oem-material.dto/oem-material.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemMaterialEntity } from '../../src/oem/main/oem-materials/oem-material.entity';
+import { OemMaterialSerializeDto } from '../../src/oem/main/oem-materials/oem-material.dto/oem-material.serialize.dto';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
 import { initPolicy } from '../test.utils/init-policy.util';
 import { enable } from 'async-local-storage';
 import { initTestDescription } from '../test.utils/init-test.util';
 import { METHODS } from '../test.enums/methods.enum';
-import { initDefer } from '../utils/init-defer.util';
-import { ActionLogTypeEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
-import { ActionsEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
+import { initDefer } from '../../src/utils/init-defer.util';
+import { ActionLogTypeEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
+import { ActionsEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
 
 enable();
 

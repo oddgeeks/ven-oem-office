@@ -6,21 +6,27 @@ import { useContainer } from 'class-validator';
 import { enable } from 'async-local-storage';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemProductEntity } from '../oem/main/oem-products/oem-product.entity';
-import { OemProductSerializeDto } from '../oem/main/oem-products/oem-product.dto/oem-product.serialize.dto';
-import CreateOemPricingModels from '../oem/seeds/create-oem-pricing-models.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemUnitTiers from '../oem/seeds/create-oem-unit-tiers.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemProductEntity } from '../../src/oem/main/oem-products/oem-product.entity';
+import { OemProductSerializeDto } from '../../src/oem/main/oem-products/oem-product.dto/oem-product.serialize.dto';
+import CreateOemPricingModels from '../../src/oem/seeds/create-oem-pricing-models.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemUnitTiers from '../../src/oem/seeds/create-oem-unit-tiers.seed';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
+import { RunMultipleSeeds } from '../../src/oem/seeds/seed.utils/run-multiple-seeds.util';
+import { closeAllConnection } from '../test.utils/close-all-connections.util';
+import CreateOemPriceTiers from '../../src/oem/seeds/create-oem-price-tiers.seed';
+import { OemProductsRelationships } from '../../src/oem/intermediaries/_oem-products-relationships/oem-products-relationships.entity';
+import CreateOemProductsRelationships from '../../src/oem/seeds/create-oem-products-relationships.seed';
+
 enable();
 
 describe('ProductController (e2e)', () => {
@@ -82,13 +88,15 @@ describe('ProductController (e2e)', () => {
     app.useGlobalFilters(new HttpExceptionFilter());
     app.useGlobalPipes();
 
-    await runSeeder(CreateOemCompanies);
-    await runSeeder(CreateOemRoles());
-    await runSeeder(CreateOemHierarchyLevels);
-    await runSeeder(CreateOemHierarchies);
-    await runSeeder(CreateOemUsers);
-    await runSeeder(CreateOemPricingModels);
-    await runSeeder(CreateOemUnitTiers);
+    await RunMultipleSeeds([
+      CreateOemCompanies,
+      CreateOemRoles(),
+      CreateOemHierarchyLevels,
+      CreateOemHierarchies,
+      CreateOemUsers,
+      CreateOemPricingModels,
+      CreateOemUnitTiers,
+    ]);
     product = await factory(OemProductEntity)().make();
     product.productId = 1;
     product.productHierarchyId = 96;
@@ -101,12 +109,7 @@ describe('ProductController (e2e)', () => {
 
   afterAll(async () => {
     await clearDB();
-    //tearDownDatabase() close connection ONLY for last created
-    //await tearDownDatabase();
-    getConnectionManager().connections.map(
-      async (i) => await getConnection(i.name).close(),
-    );
-
+    await closeAllConnection();
     await app.close();
     global.gc && global.gc();
   });
@@ -125,7 +128,31 @@ describe('ProductController (e2e)', () => {
             expect.objectContaining(new SerializeClass(comparedData)),
           );
           receivedData = res.body.data;
-          done();
+          runSeeder(CreateOemPriceTiers).then(() => done());
+        });
+    });
+  });
+
+  describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
+    const method = METHODS.POST;
+    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
+      return request(server)
+        [method](PATH)
+        .set('Origin', 'demo.localhost')
+        .send({ ...comparedData, productId: 2, productName: 'Test 2' })
+        .end((_, res) => {
+          console.debug(res.body);
+          expect(res.status).toBe(getMetaData(method).expectedStatus);
+          expect(res.body.data).toEqual(
+            expect.objectContaining(
+              new SerializeClass({
+                ...comparedData,
+                productId: 2,
+                productName: 'Test 2',
+              }),
+            ),
+          );
+          runSeeder(CreateOemProductsRelationships).then(() => done());
         });
     });
   });
@@ -150,17 +177,41 @@ describe('ProductController (e2e)', () => {
     });
   });
 
+  describe(`${METHODS.GET.toUpperCase()} ${PATH}`, () => {
+    const method = METHODS.GET;
+    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
+      return request(server)
+        [method](
+          PATH +
+            '/1' +
+            '?join=pricingModel||modelName,unitDuration,unitMetric&join=priceTiers&join=priceTiers.unitTier&sort=priceTiers.unitTier.startRange,ASC&filter=priceTiers.isEnabled||eq||true',
+        )
+        .set('Origin', 'demo.localhost')
+        .end((_, res) => {
+          console.debug(res.body);
+          expect(res.status).toBe(getMetaData(method).expectedStatus);
+          expect(res.body.data[0]).toEqual(
+            expect.objectContaining(new SerializeClass(comparedData)),
+          );
+          done();
+        });
+    });
+  });
+
+  //update product hierarchy
   describe(`${METHODS.PATCH.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.PATCH;
     it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
       return request(server)
         [method](PATH + '/' + receivedData[MODEL_ID])
         .set('Origin', 'demo.localhost')
-        .send(PATCH_TEST)
+        .send({ ...PATCH_TEST, productHierarchyId: 95 })
         .end((_, res) => {
           console.debug(res.body);
           expect(res.status).toBe(getMetaData(method).expectedStatus);
-          expect(res.body.data).toEqual(expect.objectContaining(PATCH_TEST));
+          expect(res.body.data).toEqual(
+            expect.objectContaining({ ...PATCH_TEST, productHierarchyId: 95 }),
+          );
           done();
         });
     });
@@ -225,6 +276,11 @@ describe('ProductController (e2e)', () => {
         .set('Origin', 'demo.localhost');
       console.debug(res.body);
       expect(res.status).toBe(getMetaData(method).expectedStatus);
+      const repo = getConnection('MASTER_CONNECTION_CONF').getRepository(
+        OemProductsRelationships,
+      );
+      const productRelationships = await repo.find({ isEnabled: true });
+      expect(productRelationships).toHaveLength(0);
       done();
     });
   });

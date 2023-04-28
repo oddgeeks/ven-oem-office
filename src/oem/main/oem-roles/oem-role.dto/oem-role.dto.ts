@@ -22,6 +22,7 @@ import { OemUserEntity } from '../../oem-users/oem-user.entity';
 import { IsPriorityAlreadyExist } from '../oem-role.validators/is-priority-already-exist.validator';
 import { IsRoleNameAlreadyExist } from '../oem-role.validators/is-role-name-already-exist.validator';
 import { ApprovalQueuePriority } from '../../oem-approval-queue-priorities/oem-approval-queue-priority.entity';
+import { Transform } from 'class-transformer';
 
 export class RoleDto {
   /**
@@ -47,6 +48,9 @@ export class RoleDto {
   @IsString()
   @MaxLength(128)
   @IsRoleNameAlreadyExist()
+  @Transform(({ value }) => {
+    return String(value)?.trim();
+  })
   roleName: string;
 
   /**

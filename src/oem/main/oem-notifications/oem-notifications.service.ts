@@ -2,11 +2,13 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager, Connection } from 'typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { CrudRequest } from '@nestjsx/crud';
 
 import { OemNotification } from './oem-notification.entity';
 import { OemNotificationCreateDto } from './oem-notification.dto/oem-notification.create.dto';
 import { IOemNotificationUpdateManyReqBody } from './oem-notification.type/oem-notification-update-many-req-body.type';
 import { CommonDefaultMethodExtension } from '../../../common/decorators/common-default-method-extention.decorator';
+import { FilterCurrentUser } from '../../../common/decorators/fiter-current-user.decorator';
 
 @Injectable()
 @CommonDefaultMethodExtension
@@ -74,5 +76,10 @@ export class OemNotificationsService extends TypeOrmCrudService<OemNotification>
 
       return updatedNotifications;
     });
+  }
+
+  @FilterCurrentUser('receiverId')
+  async getMany(req: CrudRequest) {
+    return super.getMany(req);
   }
 }

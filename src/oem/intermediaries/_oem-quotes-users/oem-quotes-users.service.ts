@@ -16,7 +16,7 @@ import { OemQuotesUsersReplaceDto } from './oem-quotes-users.dto/oem-quotes-user
 import { OemQuoteApprovalQueuesService } from '../_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queues.service';
 import { OemQuoteApprovalQueue } from '../_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.entity';
 import { OemUserEntity } from '../../main/oem-users/oem-user.entity';
-import { OemVacationRule } from '../../main/oem-vacation-rules/oem-vacation-rule.entity';
+import { OemVacationRule } from '../../main/oem-rules/oem-vacation-rules/oem-vacation-rule.entity';
 import { OemQuoteEntity } from '../../main/oem-quotes/oem-quote.entity';
 import { ActionLogs } from '../../main/oem-action-logs/oem-action-logs.decorators/action-logs.decorator';
 import { ActionLogTypeEnum } from '../../main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
@@ -67,6 +67,9 @@ export class OemQuotesUsersService extends TypeOrmCrudService<OemQuotesUsers> {
 
     const quote = await manager.findOne(OemQuoteEntity, dto.quoteId);
     if (!quote) throw new NotFoundException('Quote not found');
+
+    if (quote.quoteStatus === QuoteStatusEnum.EXPIRED)
+      throw new BadRequestException('Quote expired');
 
     const quoteUser = await manager.save(
       this.repo.create({
@@ -205,6 +208,9 @@ export class OemQuotesUsersService extends TypeOrmCrudService<OemQuotesUsers> {
       throw new NotFoundException('Quote user not found');
     }
 
+    if (quoteUser.quote.quoteStatus === QuoteStatusEnum.EXPIRED)
+      throw new BadRequestException('Quote expired');
+
     if (quoteUser.isApprover !== false && dto.isApprover === false) {
       throw new BadRequestException(
         'You cannot set isApprover to false, please choose another quote user and set him to isApprover, the current would be disabled',
@@ -299,8 +305,6 @@ export class OemQuotesUsersService extends TypeOrmCrudService<OemQuotesUsers> {
           userId: userId.value,
         },
       });
-
-      // console.log('QuoteUsers - replaceOne', quoteUser, req.parsed);
 
       if (quoteUser) {
         return this.update(req, quoteId.value, userId.value, dto, manager);

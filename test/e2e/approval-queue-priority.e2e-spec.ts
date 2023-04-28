@@ -11,19 +11,19 @@ import { useContainer } from 'class-validator';
 import * as _ from 'lodash';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemRoleEntity } from '../oem/main/oem-roles/oem-role.entity';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemApprovalQueuePriority } from '../oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
-import { OemApprovalQueuePrioritySerializeDto } from '../oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.dto/oem-approval-queue-priority.serialize.dto';
+import { OemRoleEntity } from '../../src/oem/main/oem-roles/oem-role.entity';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemApprovalQueuePriority } from '../../src/oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
+import { OemApprovalQueuePrioritySerializeDto } from '../../src/oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.dto/oem-approval-queue-priority.serialize.dto';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 
 import { enable } from 'async-local-storage';
 import { initPolicy } from '../test.utils/init-policy.util';

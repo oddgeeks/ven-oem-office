@@ -1,3 +1,103 @@
+## [1.5.7](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.6...v1.5.7) (2023-04-28)
+
+
+### Bug Fixes
+
+* **VEN-1551:** filter notifications by authorized user ([97fbd4f](https://bitbucket.org/bloodandtreasure/vendori-api/commits/97fbd4f42736fcfb4363caf5c45dc4d2a0b18420))
+* **VEN-2549:** return 'My Quotes and Vendos Pending Approval' by owner, 'Workflow Approval Queue' regardless of workflow user attachment ([dcc7e71](https://bitbucket.org/bloodandtreasure/vendori-api/commits/dcc7e715d8e0b27a2960bd2bdc0ab984b44037f0))
+* **VEN-2637:** reimplement SetDeleteMethod decorator ([c2b541e](https://bitbucket.org/bloodandtreasure/vendori-api/commits/c2b541e5c6db01317bcebd129107fe9f273e58b7))
+
+
+### Features
+
+* **VEN-1551:** mark notifications as read when logout endpoint is triggered ([1b0dcb6](https://bitbucket.org/bloodandtreasure/vendori-api/commits/1b0dcb65f4b6ec15025550f67fb0a1f9ebb7192b))
+
+
+
+## [1.5.6](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.5...v1.5.6) (2023-04-27)
+
+
+### Bug Fixes
+
+* **seeds:** connection is not recognized ([418b807](https://bitbucket.org/bloodandtreasure/vendori-api/commits/418b8074ad4b53acb002be8c70ed5e5c39584881))
+* **VEN-1585:** resolve the last vendo uuid ([3abe75b](https://bitbucket.org/bloodandtreasure/vendori-api/commits/3abe75baa221e71df645ed14fd0aa6d1def16051))
+* **VEN-2652:** add unique rule/role migrations ([b151aba](https://bitbucket.org/bloodandtreasure/vendori-api/commits/b151aba7f3da5a6c19c452464b046938283a8b3d))
+* **VEN-2652:** fix space trim, fix priority ([0605c86](https://bitbucket.org/bloodandtreasure/vendori-api/commits/0605c86545c554083dfe9a57614da9db6cb36273))
+* **VEN-2689:** add default limit value of pagination ([9e8a760](https://bitbucket.org/bloodandtreasure/vendori-api/commits/9e8a7606c3fd66157e49ec4d8ffdbee4b479605e))
+
+
+### Features
+
+* **VEN-2652:** add validations ([a7498b9](https://bitbucket.org/bloodandtreasure/vendori-api/commits/a7498b9c7f9acbf6ee7a93110129ec272eb15e4b))
+
+
+
+## [1.5.5](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.4...v1.5.5) (2023-04-26)
+
+
+### Bug Fixes
+
+* **auth:** logout issue ([5811563](https://bitbucket.org/bloodandtreasure/vendori-api/commits/5811563b16144d2de17ca5d365b79c553f4d362e))
+* **multi-tenancy:** revert the auth decorator changes - metadata not found ([c6f678e](https://bitbucket.org/bloodandtreasure/vendori-api/commits/c6f678e972af42fdde4d10eecc81cf2de384ef25))
+* **VEN-2676:** create an approval queue for admin user ([b501070](https://bitbucket.org/bloodandtreasure/vendori-api/commits/b501070bb91d8709f10293d6dd7250fa763a9093))
+
+
+
+## [1.5.4](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.3...v1.5.4) (2023-04-26)
+
+
+### Bug Fixes
+
+* **build:** build issues ([04cd2f5](https://bitbucket.org/bloodandtreasure/vendori-api/commits/04cd2f5c57f6a562a1b5054a38697f54241a06e4))
+* **login:** tenancy changes break login ([ab75f89](https://bitbucket.org/bloodandtreasure/vendori-api/commits/ab75f89599a1be84e3f65a7526bd10cbc22d486c))
+* **VEN-2630, user-creation:** fix matching symbols, fix user creation ([6cbb5c6](https://bitbucket.org/bloodandtreasure/vendori-api/commits/6cbb5c67eb55813097ccb041761b29a291e1b1cb))
+* **VEN-2647:** add validation of quote, vendo for updating ([fe5cdcf](https://bitbucket.org/bloodandtreasure/vendori-api/commits/fe5cdcfbe3ca0df102e5ecfedd3e8184430ed347))
+* **VEN-2650:** fix creating company-channel ([ec5f639](https://bitbucket.org/bloodandtreasure/vendori-api/commits/ec5f639e29fa1e11541f4b8ac0d300900d3cd900))
+
+
+
+## [1.5.3](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.2...v1.5.3) (2023-04-26)
+
+
+### Bug Fixes
+
+* **login:** tenancy changes break login ([b0b599b](https://bitbucket.org/bloodandtreasure/vendori-api/commits/b0b599b9bfc2fe1458051ca2771b0035de29987e))
+* **okta:** okta does not work in production due to the secure feature of cookies ([d5f2f2e](https://bitbucket.org/bloodandtreasure/vendori-api/commits/d5f2f2e5e0700226ed2b032bd4f6fb561213536a))
+* **VEN-2683,VEN-2662:** fix product not found, fix search overrides ([6daf192](https://bitbucket.org/bloodandtreasure/vendori-api/commits/6daf192eea57eb2343fa8cb85d0305f30ecdd22d))
+
+
+### Features
+
+* **VEN-1896:** add multicompany supports ([2941a18](https://bitbucket.org/bloodandtreasure/vendori-api/commits/2941a18a22f6476c0e6317b4eddcf6c409290914))
+* **VEN-1896:** add x-company header, add test ([4bacf23](https://bitbucket.org/bloodandtreasure/vendori-api/commits/4bacf2354a60fa277fa90806e2855ee578b1d13e))
+* **VEN-2668:** [Integrations page] Salesforce secret and Integration User Pass are displayed as empty ([6842896](https://bitbucket.org/bloodandtreasure/vendori-api/commits/68428969d02685797ab48bc9531b6bdb231ba103))
+
+
+
+## [1.5.2](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.1...v1.5.2) (2023-04-25)
+
+
+### Bug Fixes
+
+* **decorator:** sometimes there is no join :) ([c3573e6](https://bitbucket.org/bloodandtreasure/vendori-api/commits/c3573e632c42e8bdbafb1b6b3e2016df8e5cadc8))
+* **test-paths:** fix paths for tests ([cb6b5bc](https://bitbucket.org/bloodandtreasure/vendori-api/commits/cb6b5bce5edbf4fb9d4fa4aa711b0d42b64320df))
+* **VEN-2642:** fix FixUpdateReplaceOne decorator. Do not override parsed.search. ([9670c68](https://bitbucket.org/bloodandtreasure/vendori-api/commits/9670c68ae1d23c8093e78ca7f6b0dbe1beaf024a))
+* **VEN-2662:** fix paths ([56999ff](https://bitbucket.org/bloodandtreasure/vendori-api/commits/56999ff6b630deb4e0f4a1448ba6e5eae32c1832))
+* **VEN-2662:** fix PR feedback ([302014c](https://bitbucket.org/bloodandtreasure/vendori-api/commits/302014c43be37e09127713509d7cb69d9b7a7904))
+
+
+### Features
+
+* new endpoint for quote with sfContractId, create asset ([c7aa072](https://bitbucket.org/bloodandtreasure/vendori-api/commits/c7aa07275fb1f01d0f46edb6c7ab4633194b946b))
+
+
+### Reverts
+
+* **hierarchies:** search replacement ([8a76b50](https://bitbucket.org/bloodandtreasure/vendori-api/commits/8a76b504320798c2c7745b6a81bbe162807a0298))
+* **hierarchies:** search replacement ([e75928c](https://bitbucket.org/bloodandtreasure/vendori-api/commits/e75928cbaefe237cc8ffa9e0dd935457be54942f))
+
+
+
 ## [1.5.1](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.0...v1.5.1) (2023-04-24)
 
 

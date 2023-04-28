@@ -5,18 +5,18 @@ import { getConnection, getConnectionManager } from 'typeorm';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import { OemSavedAlertRule } from '../oem/main/oem-saved-alert-rules/oem-saved-alert-rule.entity';
-import { OemSavedAlertRuleSerializeDto } from '../oem/main/oem-saved-alert-rules/oem-saved-alert-rule.dto/oem-saved-alert-rule.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import { OemSavedAlertRule } from '../../src/oem/main/oem-rules/oem-saved-alert-rules/oem-saved-alert-rule.entity';
+import { OemSavedAlertRuleSerializeDto } from '../../src/oem/main/oem-rules/oem-saved-alert-rules/oem-saved-alert-rule.dto/oem-saved-alert-rule.serialize.dto';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 

@@ -42,7 +42,7 @@ import {
 import { OemNotification } from '../../../main/oem-notifications/oem-notification.entity';
 import { OemNotificationsService } from '../../../main/oem-notifications/oem-notifications.service';
 import { OemNotificationTypeEnum } from '../../../main/oem-notifications/oem-notification.enums/oem-notification.notification-type.enum';
-import { OemVacationRule } from '../../../main/oem-vacation-rules/oem-vacation-rule.entity';
+import { OemVacationRule } from '../../../main/oem-rules/oem-vacation-rules/oem-vacation-rule.entity';
 import { OemCustomerEntity } from '../../../main/oem-customers/oem-customer.entity';
 import { OemNotificationPreference } from '../../../main/oem-notification-preferences/oem-notification-preference.entity';
 import { OemNotificationFrequencyType } from '../../../main/oem-notification-preferences/oem-notification-preference.enums/oem-notification-preference.frequency-type.enum';
@@ -583,9 +583,8 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
     // create new quote approval queues
     const quoteUsers = await manager.find(OemQuotesUsers, {
       where: {
-        isEnabled: true,
-        isSavedAlertUser: false,
         quoteId: data.quoteId,
+        isEnabled: true,
       },
       relations: ['user', 'user.role'],
     });
@@ -608,6 +607,15 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
       /* if (quoteUser.user.role?.roleType !== FunctionTypeEnum.ADMIN) {*/ //--- we do not use FunctionType in our system
       if (quoteUser.user.role?.roleType !== RoleTypeEnum.ADMIN) {
         if (quoteUser.isOwner) continue;
+
+        // Skip if it's just a saved alert user who wants to get a notification
+        if (
+          quoteUser.isSavedAlertUser &&
+          !quoteUser.isApprover &&
+          !quoteUser.isWorkflowUser
+        ) {
+          continue;
+        }
 
         // Check if internal user allowed to be added to queue
         if (
@@ -1376,6 +1384,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
   }
 
   private _getCustomerAddress(customer: OemCustomerEntity) {
+    if (!customer) return null;
     const billingAddress = customer.customerAddresses
       .map((customerAddr) => customerAddr.address)
       .find((addr) => addr.addressType === AddressTypeEnum.BILLING);
@@ -1884,7 +1893,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
     const customerAddress = this._getCustomerAddress(quote.customer);
     //TODO: why we do not follow DRY (we have the same functionality and messages in batchEmail, it is annoying to fix something)
     console.log(customerAddress);
-    if (emailList.length > 0) {
+    if (emailList.length > 0 && customerAddress) {
       const subject = `Quote ${quote.quoteName} has been expired`;
       const netAmount = newDineroDollars(
         quote.netAmount,
@@ -1907,7 +1916,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
           name: 'Vendori',
           email: VENDORI_SUPPORT_EMAIL,
         },
-        to: emailList.map((el) => _.omit(el, 'userId')),
+        to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
         templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
         dynamicTemplateData,
       };

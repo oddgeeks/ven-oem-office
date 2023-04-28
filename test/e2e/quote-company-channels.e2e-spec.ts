@@ -6,27 +6,27 @@ import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 import { enable } from 'async-local-storage';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { clearDB } from '../utils/clear-db.util';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { clearDB } from '../../src/utils/clear-db.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 
-import { OemCompanyChannel } from '../oem/intermediaries/_oem-company-channels/oem-company-channel.entity';
-import { OemQuoteCompanyChannel } from '../oem/intermediaries/_oem-quote-company-channels/oem-quote-company-channel.entity';
-import { OemQuoteCompanyChannelSerializelDto } from '../oem/intermediaries/_oem-quote-company-channels/oem-quote-company-channel.dto.ts/oem-quote-company-channel.serialize.dto';
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemChannels from '../oem/seeds/create-oem-channels.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCompanyPrograms from '../oem/seeds/create-oem-company-programs.seed';
-import CreateOemQuotes from '../oem/seeds/create-oem-quotes.seed';
-import CreateOemCompanyChannels from '../oem/seeds/create-oem-company-channels.seed';
+import { OemCompanyChannel } from '../../src/oem/intermediaries/_oem-company-channels/oem-company-channel.entity';
+import { OemQuoteCompanyChannel } from '../../src/oem/intermediaries/_oem-quote-company-channels/oem-quote-company-channel.entity';
+import { OemQuoteCompanyChannelSerializelDto } from '../../src/oem/intermediaries/_oem-quote-company-channels/oem-quote-company-channel.dto.ts/oem-quote-company-channel.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemChannels from '../../src/oem/seeds/create-oem-channels.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCompanyPrograms from '../../src/oem/seeds/create-oem-company-programs.seed';
+import CreateOemQuotes from '../../src/oem/seeds/create-oem-quotes.seed';
+import CreateOemCompanyChannels from '../../src/oem/seeds/create-oem-company-channels.seed';
 
 describe('QuoteCompanyChannelsController (e2e)', () => {
   jest.setTimeout(50000);

@@ -14,7 +14,6 @@ import { OemCompanyCreateDto } from './oem-company.dto/oem-company.create.dto';
 import { OemCompanyUpdateDto } from './oem-company.dto/oem-company.update.dto';
 import { OemCompanyReplaceDto } from './oem-company.dto/oem-company.replace.dto';
 import { OemCompanyDto } from './oem-company.dto/oem-company.dto';
-import * as moment from 'moment-timezone';
 
 @Injectable()
 @CommonDefaultMethodExtension

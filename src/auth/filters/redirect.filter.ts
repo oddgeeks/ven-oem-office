@@ -10,7 +10,7 @@ import { APP_ROOT_URL } from '../../environments';
 export class RedirectFilter<T> implements ExceptionFilter {
   catch(exception: UnauthorizedException | any, host: ArgumentsHost): any {
     console.error('AuthRedirect', exception);
-    //TODO: need to use config here
+    // TODO: need to use config here
     host
       .switchToHttp()
       .getResponse()

@@ -1,3 +1,4 @@
+import { IsOptional } from 'class-validator';
 import { OmitType } from '@nestjs/swagger';
 
 import { OemCompanyChannelDto } from './oem-company-channel.dto';
@@ -13,11 +14,13 @@ export class CompanyChannelReplaceDto extends OmitType(OemCompanyChannelDto, [
   'createdAt',
   'updatedAt',
   'company',
-  'channelId',
   'geoHierarchy',
   'companyProgram',
   'licensingProgram',
   'users',
-]) {}
+]) {
+  @IsOptional()
+  channelId: number;
+}
 
 export { CompanyChannelReplaceDto as OemCompanyChannelReplaceDto };

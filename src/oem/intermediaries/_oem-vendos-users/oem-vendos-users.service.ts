@@ -16,7 +16,7 @@ import { OemVendosUsersReplaceDto } from './oem-vendos-users.dto/oem-vendos-user
 import { OemVendoApprovalQueuesService } from '../_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queues.service';
 import { OemVendoApprovalQueue } from '../_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.entity';
 import { OemUserEntity } from '../../main/oem-users/oem-user.entity';
-import { OemVacationRule } from '../../main/oem-vacation-rules/oem-vacation-rule.entity';
+import { OemVacationRule } from '../../main/oem-rules/oem-vacation-rules/oem-vacation-rule.entity';
 import { OemVendoEntity } from '../../main/oem-vendos/oem-vendo.entity';
 import { ActionLogs } from '../../main/oem-action-logs/oem-action-logs.decorators/action-logs.decorator';
 import { ActionLogTypeEnum } from '../../main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
@@ -57,14 +57,13 @@ export class OemVendosUsersService extends TypeOrmCrudService<OemVendosUsers> {
     });
     const userId = vacationRule?.targetUserId || dto.userId;
     const user = await manager.findOne(OemUserEntity, userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    if (!user) throw new NotFoundException('User not found');
 
     const vendo = await manager.findOne(OemVendoEntity, dto.vendoId);
-    if (!vendo) {
-      throw new NotFoundException('Vendo not found');
-    }
+    if (!vendo) throw new NotFoundException('Vendo not found');
+
+    if (vendo.vendoStatus === VendoStatusEnum.EXPIRED)
+      throw new BadRequestException('Vendo expired');
 
     const vendoUser = await manager.save(
       this.repo.create({
@@ -204,6 +203,9 @@ export class OemVendosUsersService extends TypeOrmCrudService<OemVendosUsers> {
     if (!vendoUser) {
       throw new NotFoundException('Vendo user not found');
     }
+
+    if (vendoUser.vendo.vendoStatus === VendoStatusEnum.EXPIRED)
+      throw new BadRequestException('This vendo is expired');
 
     if (vendoUser.isApprover !== false && dto.isApprover === false) {
       throw new BadRequestException(

@@ -41,7 +41,7 @@ import {
 } from '../../../../shared/email/email.type';
 import { OemNotificationsService } from '../../../main/oem-notifications/oem-notifications.service';
 import { OemNotificationTypeEnum } from '../../../main/oem-notifications/oem-notification.enums/oem-notification.notification-type.enum';
-import { OemVacationRule } from '../../../main/oem-vacation-rules/oem-vacation-rule.entity';
+import { OemVacationRule } from '../../../main/oem-rules/oem-vacation-rules/oem-vacation-rule.entity';
 import { OemCustomerEntity } from '../../../main/oem-customers/oem-customer.entity';
 import { OemNotification } from '../../../main/oem-notifications/oem-notification.entity';
 import { OemNotificationPreference } from '../../../main/oem-notification-preferences/oem-notification-preference.entity';
@@ -472,9 +472,8 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
     // create new quote approval queues
     const vendoUsers = await manager.find(OemVendosUsers, {
       where: {
-        isEnabled: true,
-        isSavedAlertUser: false, // why we need this?
         vendoId: data.vendoId,
+        isEnabled: true,
       },
       relations: ['user', 'user.role'],
     });
@@ -490,6 +489,15 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
       if (vendoUser.user.role?.functionType !== FunctionTypeEnum.ADMIN) {
         // Check if external user allowed to be added to queue
         if (vendoUser.isOwner) continue;
+
+        // Skip if it's just a saved alert user who wants to get a notification
+        if (
+          vendoUser.isSavedAlertUser &&
+          !vendoUser.isApprover &&
+          !vendoUser.isWorkflowUser
+        ) {
+          continue;
+        }
 
         // Check if internal user allowed to be added to queue
         if (

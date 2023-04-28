@@ -8,7 +8,7 @@ import { OemActionLogEntity } from '../../main/oem-action-logs/oem-action-log.en
 import { OemCompanyChannelSetting } from '../_oem-company-channels-settings/oem-company-channel-setting.entity';
 import { OemChannelEntity } from '../../main/oem-channels/oem-channel.entity';
 import { CompanyChannelAddressEntity } from '../_oem-company-channel-addresses/oem-company-channel-addresses.entity';
-import { OemAddressEntity } from '@src/oem/main/oem-addresses/oem-address.entity';
+import { OemAddressEntity } from '../../main/oem-addresses/oem-address.entity';
 
 @Module({
   imports: [

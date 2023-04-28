@@ -8,44 +8,44 @@ import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemApprovalQueuePriority } from '../oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
-import { OemQuoteEntity } from '../oem/main/oem-quotes/oem-quote.entity';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { OemQuoteApprovalQueue } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.entity';
-import { OemQuoteApprovalQueueSerializeDto } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.dto/oem-quote-approval-queue.serialize.dto';
-import { QuoteApprovalQueueStatusEnum } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-status.enum';
-import { QuoteStatusEnum } from '../oem/main/oem-quotes/oem-quote.enums/quote-status.enum';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemApprovalQueuePriority } from '../../src/oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
+import { OemQuoteEntity } from '../../src/oem/main/oem-quotes/oem-quote.entity';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { OemQuoteApprovalQueue } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.entity';
+import { OemQuoteApprovalQueueSerializeDto } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.dto/oem-quote-approval-queue.serialize.dto';
+import { QuoteApprovalQueueStatusEnum } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-status.enum';
+import { QuoteStatusEnum } from '../../src/oem/main/oem-quotes/oem-quote.enums/quote-status.enum';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemApprovalQueuePriorities from '../oem/seeds/create-oem-approval-queue-priorities.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemApprovalQueuePriorities from '../../src/oem/seeds/create-oem-approval-queue-priorities.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
 
-import { clearDB } from '../utils/clear-db.util';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
 
 import { initPolicy } from '../test.utils/init-policy.util';
 import { enable } from 'async-local-storage';
-import { QuoteApprovalQueueTargetTypeEnum } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-target-type.enum';
-import { OemQuotesUsers } from '../oem/intermediaries/_oem-quotes-users/oem-quotes-users.entity';
-import { QuoteUserTypeEnum } from '../oem/intermediaries/_oem-quotes-users/oem-quotes-users.enums/quoteUserTypeEnum';
-import { AuthService } from '../auth/auth.service';
+import { QuoteApprovalQueueTargetTypeEnum } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-target-type.enum';
+import { OemQuotesUsers } from '../../src/oem/intermediaries/_oem-quotes-users/oem-quotes-users.entity';
+import { QuoteUserTypeEnum } from '../../src/oem/intermediaries/_oem-quotes-users/oem-quotes-users.enums/quoteUserTypeEnum';
+import { AuthService } from '../../src/auth/auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OemHierarchiesModule } from '../oem/main/oem-hierarchies/oem-hierarchies.module';
+import { OemHierarchiesModule } from '../../src/oem/main/oem-hierarchies/oem-hierarchies.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import CreateOemCompanyChannels from '../oem/seeds/create-oem-company-channels.seed';
-import CreateOemChannels from '../oem/seeds/create-oem-channels.seed';
-import CreateOemCompanyPrograms from '../oem/seeds/create-oem-company-programs.seed';
+import CreateOemCompanyChannels from '../../src/oem/seeds/create-oem-company-channels.seed';
+import CreateOemChannels from '../../src/oem/seeds/create-oem-channels.seed';
+import CreateOemCompanyPrograms from '../../src/oem/seeds/create-oem-company-programs.seed';
 
 describe('QuoteAndVendos (e2e)', () => {
   jest.setTimeout(50000);

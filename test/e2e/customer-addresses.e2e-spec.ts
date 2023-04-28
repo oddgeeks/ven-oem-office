@@ -5,18 +5,18 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { clearDB } from '../utils/clear-db.util';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemCustomers from '../oem/seeds/create-oem-customer.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import { OemCustomerEntity } from '../oem/main/oem-customers/oem-customer.entity';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import { OemCustomerAddresses } from '../oem/intermediaries/_oem-customer-addresses/oem-customer-addresses.entity';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemCustomers from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import { OemCustomerEntity } from '../../src/oem/main/oem-customers/oem-customer.entity';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import { OemCustomerAddresses } from '../../src/oem/intermediaries/_oem-customer-addresses/oem-customer-addresses.entity';
 
 describe('CustomerAddressesController (e2e)', () => {
   jest.setTimeout(50000);

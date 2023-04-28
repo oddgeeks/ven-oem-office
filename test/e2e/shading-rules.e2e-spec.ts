@@ -4,18 +4,18 @@ import * as request from 'supertest';
 import { getConnection, getConnectionManager } from 'typeorm';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemShadingRule } from '../oem/main/oem-shading-rules/oem-shading-rule.entity';
-import { OemShadingRuleSerializeDto } from '../oem/main/oem-shading-rules/oem-shading-rule.dto/oem-shading-rule.serialize.dto';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemShadingRule } from '../../src/oem/main/oem-rules/oem-shading-rules/oem-shading-rule.entity';
+import { OemShadingRuleSerializeDto } from '../../src/oem/main/oem-rules/oem-shading-rules/oem-shading-rule.dto/oem-shading-rule.serialize.dto';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 
@@ -145,27 +145,31 @@ describe('ShadingRulesController (e2e)', () => {
       return request(server)
         [method](PATH + '/' + receivedData[MODEL_ID])
         .set('Origin', 'demo.localhost')
-        .send(PATCH_TEST)
+        .send({ ...PATCH_TEST, shadingRuleName: '  Test   ' })
         .end((_, res) => {
           console.debug(res.body);
           expect(res.status).toBe(getMetaData(method).expectedStatus);
-          expect(res.body.data).toEqual(expect.objectContaining(PATCH_TEST));
+          //should trim name
+          expect(res.body.data).toEqual(
+            expect.objectContaining({
+              shadingRuleName: PATCH_TEST.shadingRuleName.trim(),
+            }),
+          );
           done();
         });
     });
   });
 
-  describe(`${METHODS.PATCH.toUpperCase()} ${PATH}/priority`, () => {
-    const method = METHODS.PATCH;
+  describe(`${METHODS.POST.toUpperCase()} ${PATH}`, () => {
+    const method = METHODS.POST;
     it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
       return request(server)
-        [method](PATH + '/' + receivedData[MODEL_ID] + '/priority')
+        [method](PATH)
         .set('Origin', 'demo.localhost')
-        .send({ priority: 1 })
+        .send({ ...comparedData, shadingRuleName: 'Test' })
         .end((_, res) => {
           console.debug(res.body);
-          expect(res.status).toBe(getMetaData(method).expectedStatus);
-          expect(res.body.data).toEqual(expect.objectContaining(PATCH_TEST));
+          expect(res.status).toBe(400);
           done();
         });
     });
@@ -201,6 +205,25 @@ describe('ShadingRulesController (e2e)', () => {
       expect(res.status).toEqual(getMetaData(method).expectedStatus);
     });
   });
+
+  describe(`${METHODS.PATCH.toUpperCase()} ${PATH}/priority`, () => {
+    const method = METHODS.PATCH;
+    it(`should ${getMetaData(method).action} a ${MODEL}`, (done) => {
+      return request(server)
+        [method](PATH + '/' + receivedData[MODEL_ID] + '/priority')
+        .set('Origin', 'demo.localhost')
+        .send({ priority: 2 })
+        .end((_, res) => {
+          console.debug(res.body);
+          expect(res.status).toBe(getMetaData(method).expectedStatus);
+          expect(res.body.data).toEqual(
+            expect.objectContaining({ priority: 2 }),
+          );
+          done();
+        });
+    });
+  });
+
 
   describe(`${METHODS.DELETE.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.DELETE;

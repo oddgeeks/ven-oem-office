@@ -10,38 +10,38 @@ import * as moment from 'moment-timezone';
 import { enable } from 'async-local-storage';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemApprovalQueuePriority } from '../oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
-import { OemVendoEntity } from '../oem/main/oem-vendos/oem-vendo.entity';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { OemVendoApprovalQueue } from '../oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.entity';
-import { OemVendoApprovalQueueSerializeDto } from '../oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.dto/oem-vendo-approval-queue.serialize.dto';
-import { VendoApprovalQueueStatusEnum } from '../oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.enums/vendo-approval-queue-status.enum';
-import { VendoStatusEnum } from '../oem/main/oem-vendos/oem-vendo.enums/vendo-status.enum';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemApprovalQueuePriority } from '../../src/oem/main/oem-approval-queue-priorities/oem-approval-queue-priority.entity';
+import { OemVendoEntity } from '../../src/oem/main/oem-vendos/oem-vendo.entity';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { OemVendoApprovalQueue } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.entity';
+import { OemVendoApprovalQueueSerializeDto } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.dto/oem-vendo-approval-queue.serialize.dto';
+import { VendoApprovalQueueStatusEnum } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.enums/vendo-approval-queue-status.enum';
+import { VendoStatusEnum } from '../../src/oem/main/oem-vendos/oem-vendo.enums/vendo-status.enum';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemApprovalQueuePriorities from '../oem/seeds/create-oem-approval-queue-priorities.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemApprovalQueuePriorities from '../../src/oem/seeds/create-oem-approval-queue-priorities.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
 
-import { clearDB } from '../utils/clear-db.util';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OemHierarchiesModule } from '../oem/main/oem-hierarchies/oem-hierarchies.module';
+import { OemHierarchiesModule } from '../../src/oem/main/oem-hierarchies/oem-hierarchies.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from '../auth/auth.service';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { OemVendosUsers } from '../oem/intermediaries/_oem-vendos-users/oem-vendos-users.entity';
-import { VendoApprovalQueueTargetTypeEnum } from '../oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.enums/vendo-approval-queue-target-type.enum';
-import { OemQuoteEntity } from '../oem/main/oem-quotes/oem-quote.entity';
-import { OemVendosQuotes } from '../oem/intermediaries/_oem-vendos-quotes/oem-vendos-quotes.entity';
+import { AuthService } from '../../src/auth/auth.service';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { OemVendosUsers } from '../../src/oem/intermediaries/_oem-vendos-users/oem-vendos-users.entity';
+import { VendoApprovalQueueTargetTypeEnum } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-vendo-approval-queues/oem-vendo-approval-queue.enums/vendo-approval-queue-target-type.enum';
+import { OemQuoteEntity } from '../../src/oem/main/oem-quotes/oem-quote.entity';
+import { OemVendosQuotes } from '../../src/oem/intermediaries/_oem-vendos-quotes/oem-vendos-quotes.entity';
 
 describe('VendoApprovalQueuesController (e2e)', () => {
   jest.setTimeout(50000);

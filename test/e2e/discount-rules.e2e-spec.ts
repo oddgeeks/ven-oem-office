@@ -6,33 +6,33 @@ import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 import { enable } from 'async-local-storage';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemContacts from '../oem/seeds/create-oem-contacts.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemContacts from '../../src/oem/seeds/create-oem-contacts.seed';
 
-import CreateOemQuotes from '../oem/seeds/create-oem-quotes.seed';
-import { DiscountRuleTypeEnum } from '../oem/main/oem-discount-rules/oem-discount-rule.enums/discount-rule.enum';
-import CreateOemDiscountListPrices from '../oem/seeds/create-oem-visible-product-fields.seed';
-import { OemDiscountRuleEntity } from '../oem/main/oem-discount-rules/oem-discount-rule.entity';
-import { OemDiscountRuleSerializeDto } from '../oem/main/oem-discount-rules/oem-discount-rule.dto/oem-discount-rule.serialize.dto';
+import CreateOemQuotes from '../../src/oem/seeds/create-oem-quotes.seed';
+import { DiscountRuleTypeEnum } from '../../src/oem/main/oem-rules/oem-discount-rules/oem-discount-rule.enums/discount-rule.enum';
+import CreateOemDiscountListPrices from '../../src/oem/seeds/create-oem-visible-product-fields.seed';
+import { OemDiscountRuleEntity } from '../../src/oem/main/oem-rules/oem-discount-rules/oem-discount-rule.entity';
+import { OemDiscountRuleSerializeDto } from '../../src/oem/main/oem-rules/oem-discount-rules/oem-discount-rule.dto/oem-discount-rule.serialize.dto';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
 import { initPolicy } from '../test.utils/init-policy.util';
-import { ActionLogTypeEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
+import { ActionLogTypeEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
 import { initTestDescription } from '../test.utils/init-test.util';
 import { METHODS } from '../test.enums/methods.enum';
 import { getMetaData } from '../test.utils/get-metadata.util';
-import { initDefer } from '../utils/init-defer.util';
-import { ActionsEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
+import { initDefer } from '../../src/utils/init-defer.util';
+import { ActionsEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/actions.enum';
 
 describe('DiscountRulesController (e2e)', () => {
   jest.setTimeout(50000);

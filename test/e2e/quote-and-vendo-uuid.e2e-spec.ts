@@ -6,15 +6,15 @@ import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 import * as _ from 'lodash';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemQuoteAndVendoUuid } from '../oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.entity';
-import { OemQuoteAndVendoUuidSerializeDto } from '../oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.dto/oem-quote-and-vendo-uuid.serialize.dto';
-import { UuidTypesEnum } from '../oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo.enums/uuid-types.enum';
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemQuoteAndVendoUuid } from '../../src/oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.entity';
+import { OemQuoteAndVendoUuidSerializeDto } from '../../src/oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.dto/oem-quote-and-vendo-uuid.serialize.dto';
+import { UuidTypesEnum } from '../../src/oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo.enums/uuid-types.enum';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 

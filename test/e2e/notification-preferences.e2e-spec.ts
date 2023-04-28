@@ -14,20 +14,20 @@ import { useContainer } from 'class-validator';
 import * as _ from 'lodash';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemNotificationPreference } from '../oem/main/oem-notification-preferences/oem-notification-preference.entity';
-import { OemNotificationPreferenceSerializeDto } from '../oem/main/oem-notification-preferences/oem-notification-preference.dto/oem-notification-preference.serialize.dto';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
-import { OemNotificationFrequencyType } from '../oem/main/oem-notification-preferences/oem-notification-preference.enums/oem-notification-preference.frequency-type.enum';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemNotificationPreference } from '../../src/oem/main/oem-notification-preferences/oem-notification-preference.entity';
+import { OemNotificationPreferenceSerializeDto } from '../../src/oem/main/oem-notification-preferences/oem-notification-preference.dto/oem-notification-preference.serialize.dto';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
+import { OemNotificationFrequencyType } from '../../src/oem/main/oem-notification-preferences/oem-notification-preference.enums/oem-notification-preference.frequency-type.enum';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import { clearDB } from '../utils/clear-db.util';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 

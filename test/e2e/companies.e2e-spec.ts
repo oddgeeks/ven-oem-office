@@ -7,23 +7,23 @@ import { useContainer } from 'class-validator';
 import { enable } from 'async-local-storage';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemCompanySerializeDto } from '../oem/main/oem-companies/oem-company.dto/oem-company.serialize.dto';
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemCompanySerializeDto } from '../../src/oem/main/oem-companies/oem-company.dto/oem-company.serialize.dto';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 
 import { initPolicy } from '../test.utils/init-policy.util';
 import { initTestDescription } from '../test.utils/init-test.util';
 
-import { initDefer } from '../utils/init-defer.util';
+import { initDefer } from '../../src/utils/init-defer.util';
 import { METHODS } from '../test.enums/methods.enum';
 import { getMetaData } from '../test.utils/get-metadata.util';
-import { ActionLogTypeEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
+import { ActionLogTypeEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
 
 describe('Companies (e2e)', () => {
   jest.setTimeout(50000);

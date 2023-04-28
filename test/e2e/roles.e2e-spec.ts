@@ -5,25 +5,25 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { METHODS } from '../test.enums/methods.enum';
 
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemRoleEntity } from '../oem/main/oem-roles/oem-role.entity';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemUserSerializeDto } from '../oem/main/oem-users/oem-user.dto/oem-user.serialize.dto';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemRoleEntity } from '../../src/oem/main/oem-roles/oem-role.entity';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemUserSerializeDto } from '../../src/oem/main/oem-users/oem-user.dto/oem-user.serialize.dto';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { RoleTypeEnum } from '../oem/main/oem-roles/oem-role.enums/role-type.enum';
-import { FunctionTypeEnum } from '../oem/main/oem-roles/oem-role.enums/function-type.enum';
-import { DataAccessEnum } from '../oem/main/oem-roles/oem-role.enums/data-access.enum';
-import { CreateAccessEnum } from '../oem/main/oem-roles/oem-role.enums/create-access.enum';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { RoleTypeEnum } from '../../src/oem/main/oem-roles/oem-role.enums/role-type.enum';
+import { FunctionTypeEnum } from '../../src/oem/main/oem-roles/oem-role.enums/function-type.enum';
+import { DataAccessEnum } from '../../src/oem/main/oem-roles/oem-role.enums/data-access.enum';
+import { CreateAccessEnum } from '../../src/oem/main/oem-roles/oem-role.enums/create-access.enum';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
-import { initDefer } from '../utils/init-defer.util';
+import { initDefer } from '../../src/utils/init-defer.util';
 import { getMetaData } from '../test.utils/get-metadata.util';
 import { initTestDescription } from '../test.utils/init-test.util';
-import { ActionLogTypeEnum } from '../oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
+import { ActionLogTypeEnum } from '../../src/oem/main/oem-action-logs/oem-action-log.enums/action-log-types.enum';
 
 describe('UsersRolesController (e2e)', () => {
   jest.setTimeout(50000);

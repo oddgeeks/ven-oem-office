@@ -63,7 +63,14 @@ export class OemQuotesAndVendosService {
     });
   }
 
+  /**
+   * all - returns all the quotes and vendos
+   * pending-approval - return quotes and vendos in 'Pending Internal Approval' status if the current user is the owner
+   * workflow-pending-approval - returns quotes and vendos in 'Pending Internal Approval' status that are waiting for the current user's approval
+   * Admin should be able to see all the quotes and vendos because they can approve anything
+   */
   getMainSQL(endpoint: QuotesAndVendosEndpoint, user: any) {
+    const userId = user.userId;
     const filteredUserId = user.dataAccessFilter?.userId;
     const assignedOnlyFilter = filteredUserId
       ? `AND user_id = ${filteredUserId}`
@@ -91,7 +98,7 @@ export class OemQuotesAndVendosService {
             cqu.user_id
           FROM oem.oem_quotes q
           LEFT JOIN oem.oem_customers c ON q.customer_id = c.customer_id
-          INNER JOIN oem.oem_quotes_users cqu ON cqu.quote_id = q.quote_id ${assignedOnlyFilter}
+          INNER JOIN oem.oem_quotes_users cqu ON cqu.quote_id = q.quote_id AND cqu.is_owner = TRUE AND cqu.user_id = ${userId}
           INNER JOIN oem.oem_quote_approval_queues cqaq ON cqaq.quote_id = q.quote_id AND
             cqaq.user_id = cqu.user_id AND cqaq.is_active = TRUE AND cqaq.status = '${QuoteApprovalQueueStatusEnum.PENDING}'
           INNER JOIN oem.oem_approval_queue_priorities caqp ON caqp.approval_queue_priority_id = cqaq.approval_queue_priority_id
@@ -121,7 +128,7 @@ export class OemQuotesAndVendosService {
             cvu.user_id
           FROM oem.oem_vendos v
           LEFT JOIN oem.oem_customers c ON v.customer_id = c.customer_id
-          INNER JOIN oem.oem_vendos_users cvu ON cvu.vendo_id = v.vendo_id ${assignedOnlyFilter}
+          INNER JOIN oem.oem_vendos_users cvu ON cvu.vendo_id = v.vendo_id AND cvu.is_owner = TRUE AND cvu.user_id = ${userId}
           INNER JOIN oem.oem_vendo_approval_queues cvaq ON cvaq.vendo_id = v.vendo_id AND
             cvaq.user_id = cvu.user_id AND cvaq.is_active = TRUE AND cvaq.status = '${VendoApprovalQueueStatusEnum.PENDING}'
           INNER JOIN oem.oem_approval_queue_priorities caqp ON caqp.approval_queue_priority_id = cvaq.approval_queue_priority_id

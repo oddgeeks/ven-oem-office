@@ -6,19 +6,19 @@ import { useContainer } from 'class-validator';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { enable } from 'async-local-storage';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { clearDB } from '../utils/clear-db.util';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { clearDB } from '../../src/utils/clear-db.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import { OemCustomerEntity } from '../oem/main/oem-customers/oem-customer.entity';
-import { OemCustomerSerializeDto } from '../oem/main/oem-customers/oem-customer.dto/oem-customer.serialize.dto';
-import { OemLicensingProgramEntity } from '../oem/main/oem-licensing-programs/oem-licensing-program.entity';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import { OemCustomerEntity } from '../../src/oem/main/oem-customers/oem-customer.entity';
+import { OemCustomerSerializeDto } from '../../src/oem/main/oem-customers/oem-customer.dto/oem-customer.serialize.dto';
+import { OemLicensingProgramEntity } from '../../src/oem/main/oem-licensing-programs/oem-licensing-program.entity';
 
 describe('CustomersController (e2e)', () => {
   jest.setTimeout(50000);

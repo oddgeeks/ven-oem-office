@@ -6,15 +6,15 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 import { useContainer } from 'class-validator';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
-import { OemLicensingProgramEntity } from '../oem/main/oem-licensing-programs/oem-licensing-program.entity';
-import { OemLicensingProgramSerializeDto } from '../oem/main/oem-licensing-programs/oem-licensing-program.dto/oem-licensing-program.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import { OemLicensingProgramEntity } from '../../src/oem/main/oem-licensing-programs/oem-licensing-program.entity';
+import { OemLicensingProgramSerializeDto } from '../../src/oem/main/oem-licensing-programs/oem-licensing-program.dto/oem-licensing-program.serialize.dto';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 
 import { initPolicy } from '../test.utils/init-policy.util';

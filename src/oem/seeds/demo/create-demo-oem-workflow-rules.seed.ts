@@ -1,7 +1,7 @@
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
 
-import { OemWorkflowRule } from '../../main/oem-workflow-rules/oem-workflow-rule.entity';
+import { OemWorkflowRule } from '../../main/oem-rules/oem-workflow-rules/oem-workflow-rule.entity';
 import { seedEntities } from '../../../utils/seed-factory.util';
 
 export default ({ companyId = 1 }: { companyId?: number }) =>

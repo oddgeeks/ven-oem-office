@@ -5,17 +5,17 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemRoleEntity } from '../oem/main/oem-roles/oem-role.entity';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemRoleEntity } from '../../src/oem/main/oem-roles/oem-role.entity';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import { OemAddressEntity } from '../oem/main/oem-addresses/oem-address.entity';
-import { CompanyAddresses } from '../oem/intermediaries/_oem-company-addresses/oem-company-addresses.entity';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import { OemAddressEntity } from '../../src/oem/main/oem-addresses/oem-address.entity';
+import { CompanyAddresses } from '../../src/oem/intermediaries/_oem-company-addresses/oem-company-addresses.entity';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 

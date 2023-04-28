@@ -5,19 +5,19 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemVacationRule } from '../oem/main/oem-vacation-rules/oem-vacation-rule.entity';
-import { OemVacationRuleSerializeDto } from '../oem/main/oem-vacation-rules/oem-vacation-rule.dto/oem-vacation-rule.serialize.dto';
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemVacationRule } from '../../src/oem/main/oem-rules/oem-vacation-rules/oem-vacation-rule.entity';
+import { OemVacationRuleSerializeDto } from '../../src/oem/main/oem-rules/oem-vacation-rules/oem-vacation-rule.dto/oem-vacation-rule.serialize.dto';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import { clearDB } from '../utils/clear-db.util';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 
@@ -104,12 +104,12 @@ describe('VacationRulesController (e2e)', () => {
 
     PUT_DATA = {
       companyId: company.companyId,
-      name: 'Vacation Rule 1',
+      name: 'Vacation Rule 2',
       sourceUserId: user1.userId,
       targetUserId: user2.userId,
     };
     PATCH_DATA = {
-      name: 'Vacation Rule 2',
+      name: 'Vacation Rule 3',
       sourceUserId: user2.userId,
       targetUserId: user1.userId,
     };

@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { CrudRequest } from '@nestjsx/crud';
 
@@ -22,21 +22,23 @@ import { OemUserReplaceDto } from './oem-user.dto/oem-user.replace.dto';
 import { OemUserDeleteDto } from './oem-user.dto/oem-user.delete.dto';
 import { OemUserRoleReassignDto } from './oem-user.dto/oem-user.role-reassign.dto';
 import { RoleTypeEnum } from '../oem-roles/oem-role.enums/role-type.enum';
+import { Repository } from 'typeorm';
 
 @Injectable()
 @SetCurrentTenant
 export class OemUsersService extends TypeOrmCrudService<OemUserEntity> {
   constructor(
-    @InjectRepository(OemUserEntity) public repo,
-    @InjectConnection('MASTER_CONNECTION') public connection,
+    @InjectRepository(OemUserEntity) public repo: Repository<OemUserEntity>,
   ) {
     super(repo);
   }
 
   public async register(data: Partial<OemUserEntity>): Promise<OemUserEntity> {
-    let user = await this.repo.findOne({ ssoLoginEmail: data.ssoLoginEmail });
+    let user: OemUserEntity = await this.repo.findOne({
+      ssoLoginEmail: data.ssoLoginEmail,
+    });
     if (!user) {
-      user = this.repo.save(new OemUserEntity(data));
+      user = await this.repo.save(new OemUserEntity(data));
     }
     return user;
   }
@@ -220,7 +222,7 @@ export class OemUsersService extends TypeOrmCrudService<OemUserEntity> {
     req: CrudRequest,
     dto?: OemUserDeleteDto,
   ): Promise<void | OemUserEntity> {
-    return this.connection.transaction(async (manager) => {
+    return this.repo.manager.connection.transaction(async (manager) => {
       const replaceUserId = dto.replaceUserId;
       const relations = this.repo.metadata.ownRelations.map(
         (relation) => relation.inverseEntityMetadata,

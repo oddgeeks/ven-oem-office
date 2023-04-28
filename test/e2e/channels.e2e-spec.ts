@@ -7,18 +7,18 @@ import { useContainer } from 'class-validator';
 import * as _ from 'lodash';
 
 import { AppModuleTestConfig } from '../app.module.test.config';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemChannelEntity } from '../oem/main/oem-channels/oem-channel.entity';
-import { OemChannelSerializeDto } from '../oem/main/oem-channels/oem-channel.dto/oem-channel.serialize.dto';
+import { OemChannelEntity } from '../../src/oem/main/oem-channels/oem-channel.entity';
+import { OemChannelSerializeDto } from '../../src/oem/main/oem-channels/oem-channel.dto/oem-channel.serialize.dto';
 
-import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { SessionAuthGuard } from '../../src/auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../../src/auth/guards/jwt-auth.guard';
 
 import { enable } from 'async-local-storage';
 import { initPolicy } from '../test.utils/init-policy.util';
-import { clearDB } from '../utils/clear-db.util';
+import { clearDB } from '../../src/utils/clear-db.util';
 
 enable();
 

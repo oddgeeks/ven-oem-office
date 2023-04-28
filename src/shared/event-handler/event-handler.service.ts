@@ -7,6 +7,7 @@ import { QuoteEventHandlerCommand } from './event.commands/impl/quote-event-hand
 import { EventsEnum } from './event.enum/events.enum';
 import { ProductEventHandlerCommand } from './event.commands/impl/product-event-handler.command';
 import { JobNames } from '../queues/queues.enums/queue-enum';
+import { SessionLogoutEventHandlerCommand } from './event.commands/impl/session-logout-event-handler.command';
 
 @Injectable()
 export class EventHandlerService {
@@ -16,7 +17,9 @@ export class EventHandlerService {
   async quoteEventListener(payload: EventPayload) {
     const id = payload.id ?? payload.payload['quoteId'];
     if (!id) return;
-    this.commandBus.execute(new QuoteEventHandlerCommand(id, payload.payload));
+    this.commandBus.execute(
+      new QuoteEventHandlerCommand(id, payload.userId, payload.payload),
+    );
   }
 
   @OnEvent(EventsEnum.QUOTE_TRANSACTED)
@@ -26,6 +29,7 @@ export class EventHandlerService {
     this.commandBus.execute(
       new QuoteEventHandlerCommand(
         id,
+        payload.userId,
         payload.payload,
         false,
         JobNames.CreateAssetToSF,
@@ -38,7 +42,11 @@ export class EventHandlerService {
     // Get quote information
     const quoteProduct = payload.payload;
     this.commandBus.execute(
-      new QuoteEventHandlerCommand(quoteProduct.quoteId, quoteProduct),
+      new QuoteEventHandlerCommand(
+        quoteProduct.quoteId,
+        payload.userId,
+        quoteProduct,
+      ),
     );
   }
 
@@ -51,6 +59,17 @@ export class EventHandlerService {
         payload.id,
         payload.payload,
         payload.deleted,
+      ),
+    );
+  }
+
+  @OnEvent(EventsEnum.SESSION_LOGOUT)
+  async SessionLogoutEventListener(payload: EventPayload) {
+    this.commandBus.execute(
+      new SessionLogoutEventHandlerCommand(
+        payload.id,
+        payload.userId,
+        payload.payload,
       ),
     );
   }

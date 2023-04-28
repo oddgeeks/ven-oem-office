@@ -47,7 +47,7 @@ export class QuotesProductsDto {
    * @example 1
    */
   @IsNumber()
-  @IsOptional() // TODO: This should be mandatory for create and optional for update - we can add an guard to resolve that
+  @IsNotEmpty()
   quoteId: number;
 
   /**

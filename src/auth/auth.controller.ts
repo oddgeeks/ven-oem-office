@@ -27,7 +27,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiBody, ApiOperation } from '@nestjs/swagger';
 import { UserSerializeDto } from '../oem/main/oem-users/oem-user.dto/oem-user.serialize.dto';
 import { OpenidAuthGuard } from './guards/openid-auth.guard';
-import { Issuer } from 'openid-client';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { LoginEmailDto } from './dto/login-email.dto';
 import { RedirectFilter } from './filters/redirect.filter';
@@ -207,32 +206,10 @@ export class AuthController {
     );
   }
 
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(SessionAuthGuard, JWTAuthGuard)
   @Get('/logout')
   async logout(@Req() req, @Res() res) {
-    const id_token = req.user ? req.user.id_token : undefined;
-    req.logout();
-    const TrustIssuer = await Issuer.discover(
-      `${process.env.OKTA_ISSUER}/.well-known/openid-configuration`,
-    );
-    req.session.destroy(null, (code) => {
-      const end_session_endpoint = TrustIssuer.metadata.end_session_endpoint;
-      // console.log(end_session_endpoint +
-      //   '&post_logout_redirect_uri=' +
-      //   process.env.OKTA_LOGOUT_REDIRECT_URI +
-      //   (id_token ? '&id_token_hint=' + id_token : ''));
-
-      if (end_session_endpoint) {
-        res.redirect(
-          end_session_endpoint +
-            '?post_logout_redirect_uri=' +
-            process.env.OKTA_LOGOUT_REDIRECT_URI +
-            (id_token ? '&id_token_hint=' + id_token : ''),
-        );
-      } else {
-        res.redirect('/');
-      }
-      return code;
-    });
+    return this.authService.logout(req, res);
   }
 }

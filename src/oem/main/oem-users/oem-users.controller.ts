@@ -103,7 +103,7 @@ interface ICrudControllerCustomDelete<T>
     //
     // 'geoHierarchy.isActive': true,
     //
-    companyId: req.user.companyId,
+    //companyId: req.user.companyId,
     'geoHierarchy.isEnabled': true,
   }),
   persist: (req) => ({

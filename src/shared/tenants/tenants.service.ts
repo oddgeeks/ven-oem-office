@@ -17,6 +17,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class TenantsService {
   private readonly logger = new Logger(TenantsService.name);
 
+  //TODO: master connection should be in import
   constructor(
     @InjectRepository(OemCompanyEntity, 'MASTER_CONNECTION')
     private companyRepo: Repository<OemCompanyEntity>,
@@ -27,13 +28,15 @@ export class TenantsService {
       ?.toLowerCase()
       .replace(/api-/, '')
       .replace(/-oem/, '');
+
     const company = await this.companyRepo.findOne({
       where: [
         { subdomain: subdomain, isEnabled: true },
         { subdomain: ILike(`%${subdomain}%`), isEnabled: true },
         { companyName: ILike(`%${subdomain}%`), isEnabled: true },
-        { companyId: 1 },
+        { companyId: 1, isEnabled: true },
       ],
+      order: { companyId: 'DESC' },
     });
 
     // this.logger.debug({
@@ -41,8 +44,6 @@ export class TenantsService {
     //   company: company,
     //   message: 'company with current subdomain',
     // });
-
-    // console.debug('company with current subdomain:', company);
 
     if (!company)
       throw new BadGatewayException(
@@ -62,21 +63,21 @@ export class TenantsService {
 
   async getTenantFromNamespace(): Promise<Tenant> {
     const tenant: string = await this.getTenant();
-    /*console.debug('tenant name from async-local-storage:', tenant);
-    this.logger.debug({
-      func: `${TenantsService.name}/getTenantFromNamespace`,
-      tenant: tenant,
-      message: 'tenant name from async-local-storage',
-    });*/
+
+    // this.logger.debug({
+    //   func: `${TenantsService.name}/getTenant`,
+    //   tenant: tenant,
+    //   message: 'tenant name from async-local-storage',
+    // });
+
     const res = await this.getTenantByName(tenant);
-    /*
-    this.logger.debug({
-      func: `${TenantsService.name}/getTenantFromNamespace`,
-      company: res,
-      message: 'company with current subdomain',
-    });
-    console.debug('company with current subdomain:', res);
-    */
+
+    // this.logger.debug({
+    //   func: `${TenantsService.name}/getTenantFromNamespace`,
+    //   company: res,
+    //   message: 'company with current subdomain',
+    // });
+
     return { ...res, name: tenant };
   }
 

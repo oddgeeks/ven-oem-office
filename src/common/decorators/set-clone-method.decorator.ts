@@ -51,15 +51,15 @@ export function SetCloneMethod(clonedRelations: string[] = []) {
         return forEach(clonedObject, iteratee);
       }
 
-      _getPrimaryKeys(repo?: Repository<BaseEntity>) {
-        const _repo: Repository<BaseEntity> = repo || this.repo;
+      _getPrimaryKeys(repo?: Repository<T & BaseEntity>) {
+        const _repo: Repository<T & BaseEntity> = repo || this.repo;
         return _repo.metadata.primaryColumns.map(
           (item: ColumnMetadata) => item.propertyName,
         );
       }
 
-      _getSingleUniqueColumns(repo?: Repository<BaseEntity>) {
-        const _repo: Repository<BaseEntity> = repo || this.repo;
+      _getSingleUniqueColumns(repo?: Repository<T & BaseEntity>) {
+        const _repo: Repository<T & BaseEntity> = repo || this.repo;
         return _repo.metadata.ownUniques
           .filter((item) => item.givenColumnNames.length === 1)
           .map((item) => item.givenColumnNames[0]);
@@ -71,7 +71,7 @@ export function SetCloneMethod(clonedRelations: string[] = []) {
         }
 
         const originalPrimaryKey = this._getPrimaryKeys()[0];
-        const name = lookup('Name', originalEntity);
+        const name = lookup('name', originalEntity);
 
         return {
           ...omit(originalEntity, [

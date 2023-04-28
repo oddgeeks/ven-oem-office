@@ -5,28 +5,28 @@ import { getConnection } from 'typeorm';
 import { runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemQuoteAndVendoUuidSerializeDto } from '../oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.dto/oem-quote-and-vendo-uuid.serialize.dto';
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemQuoteAndVendoUuidSerializeDto } from '../../src/oem/intermediaries/_oem-quote-and-vendo-uuids/oem-quote-and-vendo-uuid.dto/oem-quote-and-vendo-uuid.serialize.dto';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import CreateOemQuoteCompanyChannels from '../oem/seeds/create-oem-quote-company-channels.seed';
-import CreateOemQuotes from '../oem/seeds/create-oem-quotes.seed';
-import CreateOemVendos from '../oem/seeds/create-oem-vendos.seed';
-import CreateOemChannels from '../oem/seeds/create-oem-channels.seed';
-import CreateOemCompanyPrograms from '../oem/seeds/create-oem-company-programs.seed';
-import CreateOemCompanyChannels from '../oem/seeds/create-oem-company-channels.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import CreateOemQuoteCompanyChannels from '../../src/oem/seeds/create-oem-quote-company-channels.seed';
+import CreateOemQuotes from '../../src/oem/seeds/create-oem-quotes.seed';
+import CreateOemVendos from '../../src/oem/seeds/create-oem-vendos.seed';
+import CreateOemChannels from '../../src/oem/seeds/create-oem-channels.seed';
+import CreateOemCompanyPrograms from '../../src/oem/seeds/create-oem-company-programs.seed';
+import CreateOemCompanyChannels from '../../src/oem/seeds/create-oem-company-channels.seed';
 
 expect.extend({
   toBeDistinct(received) {

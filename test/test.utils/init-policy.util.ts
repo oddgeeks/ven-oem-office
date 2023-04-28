@@ -1,7 +1,7 @@
 import { useRefreshDatabase } from 'typeorm-seeding';
-import { DB_MAIN_DATABASE as DB_NAME } from '../environments';
-import { DB_MAIN_USERNAME as DB_USER } from '../environments';
-import { DB_MAIN_PASSWORD } from '../environments';
+import { DB_MAIN_DATABASE as DB_NAME } from '../../src/environments';
+import { DB_MAIN_USERNAME as DB_USER } from '../../src/environments';
+import { DB_MAIN_PASSWORD } from '../../src/environments';
 
 export async function initPolicy() {
   //TODO: in some reason it doesn't fresh a db

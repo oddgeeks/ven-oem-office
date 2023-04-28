@@ -4,25 +4,25 @@ import * as request from 'supertest';
 import { runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 
-import { OemCompanyEntity } from '../oem/main/oem-companies/oem-company.entity';
-import { OemChannelEntity } from '../oem/main/oem-channels/oem-channel.entity';
-import { OemCompanyProgram } from '../oem/intermediaries/_oem-company-programs/oem-company-program.entity';
-import { OemHierarchyEntity } from '../oem/main/oem-hierarchies/oem-hierarchy.entity';
-import { OemCompanyChannelSerializeDto } from '../oem/intermediaries/_oem-company-channels/oem-company-channel.dto/oem-company-channel.serialize.dto';
-import { ChannelTypeEnum } from '../oem/intermediaries/_oem-company-channels/oem-company-channel.enums/channel-type.enum';
+import { OemCompanyEntity } from '../../src/oem/main/oem-companies/oem-company.entity';
+import { OemChannelEntity } from '../../src/oem/main/oem-channels/oem-channel.entity';
+import { OemCompanyProgram } from '../../src/oem/intermediaries/_oem-company-programs/oem-company-program.entity';
+import { OemHierarchyEntity } from '../../src/oem/main/oem-hierarchies/oem-hierarchy.entity';
+import { OemCompanyChannelSerializeDto } from '../../src/oem/intermediaries/_oem-company-channels/oem-company-channel.dto/oem-company-channel.serialize.dto';
+import { ChannelTypeEnum } from '../../src/oem/intermediaries/_oem-company-channels/oem-company-channel.enums/channel-type.enum';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemChannels from '../oem/seeds/create-oem-channels.seed';
-import CreateOemCompanyPrograms from '../oem/seeds/create-oem-company-programs.seed';
-import CreateOemLicensingPrograms from '../oem/seeds/create-oem-licensing-programs.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemChannels from '../../src/oem/seeds/create-oem-channels.seed';
+import CreateOemCompanyPrograms from '../../src/oem/seeds/create-oem-company-programs.seed';
+import CreateOemLicensingPrograms from '../../src/oem/seeds/create-oem-licensing-programs.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
 
-import { clearDB } from '../utils/clear-db.util';
+import { clearDB } from '../../src/utils/clear-db.util';
 import { enable } from 'async-local-storage';
 import { initPolicy } from '../test.utils/init-policy.util';
 import { closeAllConnection } from '../test.utils/close-all-connections.util';

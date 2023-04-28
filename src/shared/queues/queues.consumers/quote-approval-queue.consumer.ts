@@ -103,6 +103,7 @@ export class QuoteApprovalQueueConsumer {
   }
 
   async updateQuoteStatus(quote: OemQuoteEntity, manager: EntityManager) {
+    console.log('quoteID: ', quote.quoteId);
     // filter active quote approval queues
     const activeQuoteApprovalQueues = quote.quoteApprovalQueues.filter(
       (quoteApprovalQueue) => quoteApprovalQueue.user?.isActive !== false, // active one or customer one

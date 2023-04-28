@@ -1,15 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { AuthUser } from './auth-user.decorator';
-import { TenantsService } from '../../../../shared/tenants/tenants.service';
 import { REQUEST } from '@nestjs/core';
-import { ActionLogTypeEnum } from '../../oem-action-logs/oem-action-log.enums/action-log-types.enum';
-import { ActionsEnum } from '../../oem-action-logs/oem-action-log.enums/actions.enum';
-import { InjectRepository } from '@nestjs/typeorm';
-import { OemActionLogEntity } from '../../oem-action-logs/oem-action-log.entity';
-import { Repository } from 'typeorm';
 import { copyMetadata } from '../../../../utils/copy-metadata.util';
-import { applyMixins } from '../../../../utils/apply-mixins.util';
-
 /**
  * Decorator for injecting current user to ParsedRequest() for CRUD_TYPEORM FRAMEWORK;
  * MAKE sure that the first param should be req: ParsedRequest
@@ -49,7 +40,7 @@ import { applyMixins } from '../../../../utils/apply-mixins.util';
     };
   }
 };*/
-export function SetCurrentUser<T extends { new (...args: any[]): any  }>(
+export function SetCurrentUser<T extends { new (...args: any[]): any }>(
   target: T,
 ) {
   const injectRequest = Inject(REQUEST);
@@ -68,9 +59,8 @@ export function SetCurrentUser<T extends { new (...args: any[]): any  }>(
         Object.getPrototypeOf(target.prototype),
       );
       */
-      console.table(descriptors);
+      // console.table(descriptors);
       for (const [propertyName, descriptor] of Object.entries(descriptors)) {
-
         const isMethod =
           typeof descriptor.value == 'function' &&
           propertyName != 'constructor';
@@ -84,7 +74,7 @@ export function SetCurrentUser<T extends { new (...args: any[]): any  }>(
             args[0] = {};
           }
           args[0]['user'] = this.request.user;
-          //args[0]['request'] = this.request;
+          // args[0]['request'] = this.request;
           const result = originalMethod.apply(this, args);
           return result;
         };
@@ -93,19 +83,14 @@ export function SetCurrentUser<T extends { new (...args: any[]): any  }>(
           copyMetadata(originalMethod, descriptor.value);
         }
         // manually override @Override decorator (support basic method following TypeOrm CRUD nestjs docs)
-        //TODO: need to investigate: when we use a class decorator in some reason it do not go through controller,
+        // TODO: Need to investigate: when we use a class decorator in some reason it do not go through controller,
         // if we define to propertyBase then it goes, but params decorators don't work
         if (
           target.name == 'OemUsersController' &&
           decoratedClass.prototype[propertyName] &&
           [
             'deleteOne',
-            /* 'createOne',
-             'updateOne',
-             'createOne',
-             'replaceOne',
-             'getOne',
-             'getMany',*/
+            // 'createOne', 'updateOne', 'createOne', 'replaceOne', 'getOne', 'getMany',
           ].includes(propertyName)
         ) {
           Reflect.defineMetadata(

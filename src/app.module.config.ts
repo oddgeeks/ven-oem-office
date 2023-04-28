@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import ormConfig from './oem/config/orm.config';
-import ormConfigMaster from './oem/config/orm-master.config';
+import ormConfig from '../src/oem/config/orm.config';
+import ormConfigMaster from '../src/oem/config/orm-master.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 

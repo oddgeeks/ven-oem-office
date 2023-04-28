@@ -1,4 +1,6 @@
 import { cloneDeep } from 'lodash';
+import { BaseEntity, Repository } from 'typeorm';
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
 
 //https://github.com/nestjsx/crud/issues/177
 /**
@@ -11,12 +13,19 @@ import { cloneDeep } from 'lodash';
  * - then it would override the previous ones, bc child relations were got from point 1)
  * that's why we get this strange behavior decorator
  */
-export function FixUpdateReplaceOne<T extends { new (...args: any[]): any }>(
+export function FixUpdateReplaceOne<T extends { new(...args: any[]): any }>(
   target: T,
 ) {
   const decoratedClass = class extends target {
     constructor(...args: any[]) {
       super(...args);
+    }
+
+    _getPrimaryKeys(repo?: Repository<T & BaseEntity>) {
+      const _repo: Repository<T & BaseEntity> = repo || this.repo;
+      return _repo.metadata.primaryColumns.map(
+        (item: ColumnMetadata) => item.propertyName,
+      );
     }
 
     async _callFunctionWithOverrideParams(
@@ -29,11 +38,18 @@ export function FixUpdateReplaceOne<T extends { new (...args: any[]): any }>(
       const newArgs = cloneDeep(args);
 
       newArgs[0].parsed.join = [];
-      //TODO: I think we should don't allow to update foreign key via PATCH, should be PUT
+      // TODO: I think we should not allow to update foreign key via PATCH, should be PUT
       if (func == 'updateOne' || func == 'replaceOne') {
-        //security issue! it would allow to edit product which was deleted, or hierarchy was deleted/inactivated
-        newArgs[0].parsed.search = {};
+        // Security issue! it would allow to edit product which was deleted, or hierarchy was deleted/inactivated
+        newArgs[0].parsed.search = {
+          $and: [
+            ...args[0].parsed.paramsFilter.map((filter) => {
+              return { [filter.field]: { [filter.operator]: filter.value } };
+            }),
+          ],
+        };
       }
+
       Object.keys(newArgs[0]?.options?.query?.join || {}).forEach((key) => {
         if (newArgs[0]?.options?.query?.join[key].eager === true) {
           newArgs[0].options.query.join[key].eager = false;
@@ -41,7 +57,7 @@ export function FixUpdateReplaceOne<T extends { new (...args: any[]): any }>(
       });
       newArgs[1] = { ...newArgs[1], [id?.field]: id?.value };
 
-      //console.dir({ newArgs }, { depth: null });
+      // console.dir({ newArgs }, { depth: null });
       await super[func].call(this, ...newArgs);
 
       return super.getOne({

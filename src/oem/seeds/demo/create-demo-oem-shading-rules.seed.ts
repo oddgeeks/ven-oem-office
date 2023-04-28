@@ -1,7 +1,7 @@
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
 
-import { OemShadingRule } from '../../main/oem-shading-rules/oem-shading-rule.entity';
+import { OemShadingRule } from '../../main/oem-rules/oem-shading-rules/oem-shading-rule.entity';
 import { seedEntities } from '../../../utils/seed-factory.util';
 
 export default ({ companyId = 1 }: { companyId?: number }) =>

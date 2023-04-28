@@ -14,13 +14,14 @@ import { OemProductUpdateDto } from './oem-product.dto/oem-product.update.dto';
 import { SetDeleteMethod } from '../../../common/decorators/set-delete-method.decorator';
 import { SetCurrentTenant } from '../../../common/decorators/set-current-tenant.decorator';
 import { FixUpdateReplaceOne } from '../../../common/decorators/fix-replace-one.decorator';
+import { CommonDefaultMethodExtension } from '../../../common/decorators/common-default-method-extention.decorator';
 
 @Injectable()
 @SetCloneMethod(['PriceTier'])
-@SetCurrentTenant
+/*@SetCurrentTenant
 @FixUpdateReplaceOne
-@SetDeleteMethod
-// @CommonDefaultMethodExtension
+@SetDeleteMethod*/
+@CommonDefaultMethodExtension
 export class OemProductsService extends TypeOrmCrudService<OemProductEntity> {
   constructor(
     @InjectRepository(OemProductEntity)
@@ -30,37 +31,24 @@ export class OemProductsService extends TypeOrmCrudService<OemProductEntity> {
   }
 
   @EventDispatcher<OemProductEntity>(EventsEnum.PRODUCT_CHANGED)
-  async createOne(
-    req: CrudRequest,
-    dto: Partial<OemProductCreateDto>,
-  ): Promise<OemProductEntity> {
-    return super.createOne.call(this, req, dto);
+  async createOne(...args: []): Promise<OemProductEntity> {
+    return super.createOne.call(this, ...args);
   }
 
   @EventDispatcher<OemProductEntity>(EventsEnum.PRODUCT_CHANGED)
-  async updateOne(
-    req: CrudRequest,
-    dto: Partial<OemProductUpdateDto>,
+  async updateOne(...args: []): Promise<OemProductEntity> {
+    return super.updateOne.call(this, ...args);
+  }
+
+  @EventDispatcher<OemProductEntity>(EventsEnum.PRODUCT_CHANGED)
+  async replaceOne(
+    ...args: []
   ): Promise<OemProductEntity> {
-    return super.updateOne.call(this, req, dto);
+    return super.replaceOne.call(this, ...args);
   }
 
   @EventDispatcher<OemProductEntity>(EventsEnum.PRODUCT_CHANGED, true)
-  async deleteOne(req: CrudRequest) {
-    const productId = req.parsed.paramsFilter.find(
-      (params) => params.field === req.options.params.id.field,
-    )?.value;
-    const product = await this.repo.findOne(productId);
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-    return this.repo.manager.transaction(async (manager) => {
-      return await manager.save(
-        this.repo.create({
-          ...product,
-          isEnabled: false,
-        }),
-      );
-    });
+  async deleteOne(...args: []): Promise<OemProductEntity> {
+    return super.deleteOne.call(this, ...args);
   }
 }

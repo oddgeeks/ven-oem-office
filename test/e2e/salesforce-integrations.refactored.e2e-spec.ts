@@ -1,19 +1,19 @@
 import { TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
 import { useContainer } from 'class-validator';
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import { clearDB } from '../utils/clear-db.util';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
 import { initPolicy } from '../test.utils/init-policy.util';
 
 import { closeAllConnection } from '../test.utils/close-all-connections.util';
-import { OemSalesforceIntegrationDto } from '../oem/main/oem-integrations/oem-salesforce-integrations/oem-salesforce-integration.dto/oem-salesforce-integration.dto';
+import { OemSalesforceIntegrationDto } from '../../src/oem/main/oem-integrations/oem-salesforce-integrations/oem-salesforce-integration.dto/oem-salesforce-integration.dto';
 import * as _ from 'lodash';
 import initCrudTesting from '../test.utils/init-crud-tests.util';
-import { initDefer } from '../utils/init-defer.util';
+import { initDefer } from '../../src/utils/init-defer.util';
 
 describe('SalesforceIntegration (e2e)', () => {
   jest.setTimeout(50000);
@@ -71,7 +71,7 @@ describe('SalesforceIntegration (e2e)', () => {
     global.gc && global.gc();
   });
 
-  DESCRIBE_POST(deferComparedData.get(), deferSentData.get() );
+  DESCRIBE_POST(deferComparedData.get(), deferSentData.get());
 
   DESCRIBE_GET(deferComparedData.get());
 

@@ -9,12 +9,12 @@ import { Exception } from '../serializers/exception.interface';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exc: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const exeption = this.prepareException(exception);
+    const exception = this.prepareException(exc);
 
-    response.status(exeption.status).send(exeption);
+    response.status(exception.status).send(exception);
   }
 
   prepareException(exc: any): Exception<HttpException> {
@@ -27,6 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : new InternalServerErrorException(exc.message);
     const status = error.getStatus();
     const response = error.getResponse() as { message: string };
+    console.log(exc)
     return {
       status: status,
       message: typeof response === 'object' ? response.message : response,

@@ -175,8 +175,6 @@ export class OemVendosService extends TypeOrmCrudService<OemVendoEntity> {
     req: CrudRequest,
     dto: Partial<OemVendoCreateDto>,
   ): Promise<OemVendoEntity> {
-    const uuid = await this._updateVendoUUID(dto);
-    dto.vendoUuid = uuid.prefix + uuid.lastUuid;
     return this._createOne(req, dto);
   }
 

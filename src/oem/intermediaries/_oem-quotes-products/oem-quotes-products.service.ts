@@ -16,7 +16,6 @@ import { CommonDefaultMethodExtension } from '../../../common/decorators/common-
 import { EventDispatcher } from '../../../common/decorators/event-dispatcher.decorator';
 // import { OemQuoteEventsEnum } from '../../../../oem/main/oem-quotes/oem-quote.events/oem-quote.events.enum';
 import { EventsEnum } from '../../../shared/event-handler/event.enum/events.enum';
-import { OemQuotesProductsReplaceDto } from './oem-quotes-products.dto/oem-quotes-products.replace.dto';
 
 @Injectable()
 @CommonDefaultMethodExtension
@@ -73,8 +72,6 @@ export class OemQuotesProductsService extends TypeOrmCrudService<OemQuotesProduc
         relations: ['product'],
       });
 
-      dto.quoteId = quoteProduct.quoteId;
-
       if (!quoteProduct) throw new NotFoundException('Quote Product not found');
 
       if (!dto.startDate) return super.updateOne(req, dto);
@@ -86,32 +83,8 @@ export class OemQuotesProductsService extends TypeOrmCrudService<OemQuotesProduc
 
       return super.updateOne(req, {
         ...dto,
+        // quoteId: quoteProduct.quoteId,
         endDate,
-      });
-    });
-  }
-
-  @EventDispatcher<OemQuotesProducts>(EventsEnum.QUOTE_PRODUCT_CHANGED)
-  @ActionLogs(ActionLogTypeEnum.QUOTE, ActionsEnum.UPDATE)
-  async replaceOne(
-    req: CrudRequest,
-    dto: Partial<OemQuotesProductsReplaceDto>,
-  ): Promise<OemQuotesProducts> {
-    return await this.repo.manager.transaction(async (manager) => {
-      const quoteProductId = req.parsed.paramsFilter.find(
-        (params) => params.field === req.options.params.id.field,
-      );
-
-      const quoteProduct = await this.repo.findOne({
-        where: { quoteProductId: quoteProductId.value, enabled: true },
-      });
-
-      if (!quoteProduct) throw new NotFoundException('Quote Product not found');
-
-      dto.quoteId = quoteProduct.quoteId;
-
-      return super.updateOne(req, {
-        ...dto,
       });
     });
   }

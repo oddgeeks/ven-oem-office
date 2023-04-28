@@ -29,6 +29,10 @@ import { OemQuotesContacts } from '../../oem/intermediaries/_oem-quotes-contacts
 @Injectable()
 export class SalesforceService {
   constructor(
+    // Need a transformer/integration module to separate the logic @saleforce_sync
+    // This service should only be responsible for uploading information @saleforce_sync
+    // We should not call any of these repos - only the integration module. @saleforce_sync
+    // The integration module should include transformer + imported Salesforce service @saleforce_sync
     @Inject(Logger)
     private readonly logger: Logger,
     @Inject(SalesforceClient)
@@ -232,12 +236,11 @@ export class SalesforceService {
     }
   }
 
-  public async createAsset(assetsBody: any[]) {
+  public async createAsset(quote: OemQuoteEntity) {
     try {
-      if (assetsBody.length) {
-        this.handleSFBulkCreateJob('Asset', 'upsert', assetsBody, null, {
-          extIdField: 'Vendori_Asset_Id__c',
-        });
+      const body = SFFieldMappingUtil.assetFieldMapping(quote);
+      if (body.length) {
+        this.handleSFBulkCreateJob('Asset', 'insert', body);
       }
     } catch (error) {
       const functionName = this.createAsset.name;
@@ -445,7 +448,7 @@ export class SalesforceService {
       // fired when batch request is queued in server.
       that.logger.error({
         func: `${objectName}.${operation}/bulkCreation.error`,
-        error: `${batchInfo}`,
+        error: batchInfo,
       });
     });
     batch.on('queue', function (batchInfo) {

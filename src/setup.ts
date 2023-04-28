@@ -32,6 +32,8 @@ export function setup(app: INestApplication): INestApplication {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
+      dismissDefaultMessages: false,
+      disableErrorMessages: false,
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
@@ -72,7 +74,8 @@ export function setup(app: INestApplication): INestApplication {
         httpOnly: true,
         signed: true,
         sameSite: 'lax',
-        secure: process.env.NODE_ENV === 'production',
+        // TODO: Fix secure with Okta @okta
+        secure: false, // process.env.NODE_ENV === 'production',
       },
     }),
   );

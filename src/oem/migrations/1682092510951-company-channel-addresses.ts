@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { DB_MAIN_DATABASE as DB_NAME } from '../../environments';
 
 export class CompanyChannelAddresses1681475802717
   implements MigrationInterface
@@ -27,7 +28,7 @@ export class CompanyChannelAddresses1681475802717
     // await queryRunner.query(`DROP TABLE "oem"."oem_channel_addresses" CASCADE`);
 
     await queryRunner.query(
-      `CREATE TABLE "oem"."oem_company_channel_addresses" ("company_id" integer NOT NULL DEFAULT current_setting('dsoemgjhiuy687.current_tenant')::int, "company_channel_id" integer NOT NULL, "channel_id" integer NOT NULL, "address_id" integer NOT NULL, "is_enabled" boolean NOT NULL DEFAULT true, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_e1436155ac34f14d070804ae0f0" PRIMARY KEY ("company_channel_id", "channel_id", "address_id"))`,
+      `CREATE TABLE "oem"."oem_company_channel_addresses" ("company_id" integer NOT NULL DEFAULT current_setting($$${DB_NAME}.current_tenant$$)::int, "company_channel_id" integer NOT NULL, "channel_id" integer NOT NULL, "address_id" integer NOT NULL, "is_enabled" boolean NOT NULL DEFAULT true, "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_e1436155ac34f14d070804ae0f0" PRIMARY KEY ("company_channel_id", "channel_id", "address_id"))`,
     );
     await queryRunner.query(
       `ALTER TABLE "oem"."oem_company_channel_addresses" ADD CONSTRAINT "FK_e796879259096b4359cc09cbbc1" FOREIGN KEY ("company_id") REFERENCES "oem"."oem_companies"("company_id") ON DELETE CASCADE ON UPDATE NO ACTION`,

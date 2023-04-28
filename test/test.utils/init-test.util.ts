@@ -4,6 +4,7 @@ import { getMetaData } from './get-metadata.util';
 import { ITest } from '../test.interfaces/test.interface';
 
 type SendData = {
+  headers: Record<string, string>;
   access_token: string;
   body: object;
 };
@@ -63,11 +64,18 @@ export function initTestDescription(params: ITest) {
               const comparedData = promises[2];
               const sendData = promises[3];
               const origin = params?.origin || 'demo.localhost';
-              const res = request(server)
-                [params.method](path)
-                .set('Origin', origin);
-              if ((sendData as SendData)?.access_token)
-                res.auth((sendData as SendData)?.access_token, {
+              const access_token = (sendData as SendData)?.access_token;
+              const headers = (sendData as SendData)?.headers;
+              const res = request(server)[params.method](path);
+              if (headers) {
+                for (const [headerName, value] of Object.entries(headers)) {
+                  res.set(headerName, value);
+                }
+              } else {
+                res.set('Origin', origin);
+              }
+              if (access_token)
+                res.auth(access_token, {
                   type: 'bearer',
                 });
               if (

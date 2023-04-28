@@ -29,7 +29,8 @@ export class TokenInterceptor implements NestInterceptor {
           httpOnly: true,
           signed: true,
           sameSite: 'strict',
-          secure: process.env.NODE_ENV === 'production',
+          // TODO: Fix secure with Okta @okta
+          secure: false, // process.env.NODE_ENV === 'production',
         });
 
         return user;

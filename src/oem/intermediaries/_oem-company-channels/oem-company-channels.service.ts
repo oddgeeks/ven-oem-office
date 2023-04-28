@@ -14,8 +14,9 @@ import { OemCompanyChannelSetting } from '../_oem-company-channels-settings/oem-
 import { OemCompanyChannelCreateDto } from './oem-company-channel.dto/oem-company-channel.create.dto';
 import { OemChannelEntity } from '../../main/oem-channels/oem-channel.entity';
 import { CompanyChannelAddressEntity } from '../_oem-company-channel-addresses/oem-company-channel-addresses.entity';
-import { OemAddressEntity } from '@src/oem/main/oem-addresses/oem-address.entity';
-import { AddressTypeEnum } from '@src/oem/main/oem-addresses/oem-address.enums/address-type.enum';
+import { OemAddressEntity } from '../../main/oem-addresses/oem-address.entity';
+import { AddressTypeEnum } from '../../main/oem-addresses/oem-address.enums/address-type.enum';
+import { OemCompanyChannelReplaceDto } from './oem-company-channel.dto/oem-company-channel.replace.dto';
 
 @Injectable()
 @CommonDefaultMethodExtension
@@ -60,7 +61,7 @@ export class OemCompanyChannelsService extends TypeOrmCrudService<OemCompanyChan
     const companyChannel = await super.createOne(req, dto);
 
     // Autocreate addresses
-    for (const key in Object.keys(AddressTypeEnum)) {
+    for (const addressType of Object.values(AddressTypeEnum)) {
       const address = await this.repoAddressEntity.save(
         this.repoAddressEntity.create({
           companyId,
@@ -70,7 +71,7 @@ export class OemCompanyChannelsService extends TypeOrmCrudService<OemCompanyChan
           region: '',
           country: '-',
           isEnabled: true,
-          addressType: AddressTypeEnum[key],
+          addressType,
         }),
         { transaction: true },
       );
@@ -100,8 +101,13 @@ export class OemCompanyChannelsService extends TypeOrmCrudService<OemCompanyChan
   @ActionLogs(ActionLogTypeEnum.COMPANY_CHANNELS, ActionsEnum.UPDATE)
   async replaceOne(
     req: CrudRequest,
-    dto: Partial<OemCompanyChannelUpdateDto>,
+    dto: Partial<OemCompanyChannelReplaceDto>,
   ): Promise<OemCompanyChannel> {
-    return super.replaceOne(req, dto);
+    const companyChannel = await this.getOne(req).catch(() => null);
+    if (companyChannel) {
+      return super.replaceOne(req, dto);
+    }
+
+    return this.createOne(req, dto);
   }
 }

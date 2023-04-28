@@ -20,10 +20,9 @@ import { ApprovalQueuePriority } from '../oem-approval-queue-priorities/oem-appr
 import { DB_MAIN_DATABASE as DB_NAME } from '../../../environments';
 
 @Index('oem_roles_company_id_idx', ['companyId'], {})
-//role name should not be unique bc we use 1 db for several companies
-/*@Index('oem_roles_role_name_idx', ['roleName'], {
+@Index('oem_roles_role_name_idx', ['companyId', 'roleName'], {
   unique: true,
-})*/
+})
 @Index('oem_roles_pkey', ['roleId'], { unique: true })
 @Entity('oem_roles', { schema: 'oem' })
 export class Role {
@@ -39,7 +38,7 @@ export class Role {
 
   @Column('character varying', {
     name: 'role_name',
-    /*unique: true,*/ length: 128,
+    length: 128,
   })
   roleName: string;
 

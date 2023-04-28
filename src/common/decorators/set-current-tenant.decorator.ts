@@ -171,6 +171,7 @@ export function SetCurrentTenant<T extends { new (...args: any[]): any }>(
         ...Object.getOwnPropertyDescriptors(decoratedClass.prototype),
         ...Object.getOwnPropertyDescriptors(target.prototype),
       };*/
+
       for (const [propertyName, descriptor] of Object.entries(descriptors)) {
         const isMethod =
           typeof descriptor.value == 'function' &&
@@ -178,6 +179,8 @@ export function SetCurrentTenant<T extends { new (...args: any[]): any }>(
         if (!isMethod) continue;
 
         const originalMethod = descriptor.value;
+
+        // if (propertyName == 'verifyPayload')
         descriptor.value = async function (...args: any[]) {
           return await selfDecoratedClass._wrapQueryRunner(
             originalMethod,
@@ -282,6 +285,10 @@ export function SetCurrentTenant<T extends { new (...args: any[]): any }>(
       for (const u in this) {
         if (this.hasOwnProperty(u) && (this[u] as any) instanceof Repository) {
           repo = this[u];
+          console.log('finding repo', {
+            repo: repo.target.name,
+            connection: repo.manager.connection.name,
+          });
           //setting our tenant queryRunner;
           //repo.manager.queryRunner = queryRunner;
           if (

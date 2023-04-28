@@ -6,29 +6,29 @@ import { getConnection, getConnectionManager } from 'typeorm';
 import { factory, runSeeder, useSeeding } from 'typeorm-seeding';
 import { useContainer } from 'class-validator';
 
-import { HttpExceptionFilter } from '../common/filters/http-exception.filter';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
+import { HttpExceptionFilter } from '../../src/common/filters/http-exception.filter';
+import { ResponseInterceptor } from '../../src/common/interceptors/response.interceptor';
+import { OemUserEntity } from '../../src/oem/main/oem-users/oem-user.entity';
 
-import CreateOemCompanies from '../oem/seeds/create-oem-companies.seed';
-import CreateOemRoles from '../oem/seeds/create-oem-roles.seed';
-import CreateOemUsers from '../oem/seeds/create-oem-users.seed';
-import { OemQuoteEntity } from '../oem/main/oem-quotes/oem-quote.entity';
-import CreateOemCustomer from '../oem/seeds/create-oem-customer.seed';
-import { clearDB } from '../utils/clear-db.util';
-import CreateOemAddresses from '../oem/seeds/create-oem-addresses.seed';
-import CreateOemQuotes from '../oem/seeds/create-oem-quotes.seed';
-import CreateOemHierarchies from '../oem/seeds/create-oem-hierarchies.seed';
-import CreateOemHierarchyLevels from '../oem/seeds/create-oem-hierarchy-levels.seed';
-import { OemQuotesUsers } from '../oem/intermediaries/_oem-quotes-users/oem-quotes-users.entity';
-import { QuoteUserTypeEnum } from '../oem/intermediaries/_oem-quotes-users/oem-quotes-users.enums/quoteUserTypeEnum';
-import CreateOemApprovalQueuePriorities from '../oem/seeds/create-oem-approval-queue-priorities.seed';
+import CreateOemCompanies from '../../src/oem/seeds/create-oem-companies.seed';
+import CreateOemRoles from '../../src/oem/seeds/create-oem-roles.seed';
+import CreateOemUsers from '../../src/oem/seeds/create-oem-users.seed';
+import { OemQuoteEntity } from '../../src/oem/main/oem-quotes/oem-quote.entity';
+import CreateOemCustomer from '../../src/oem/seeds/create-oem-customer.seed';
+import { clearDB } from '../../src/utils/clear-db.util';
+import CreateOemAddresses from '../../src/oem/seeds/create-oem-addresses.seed';
+import CreateOemQuotes from '../../src/oem/seeds/create-oem-quotes.seed';
+import CreateOemHierarchies from '../../src/oem/seeds/create-oem-hierarchies.seed';
+import CreateOemHierarchyLevels from '../../src/oem/seeds/create-oem-hierarchy-levels.seed';
+import { OemQuotesUsers } from '../../src/oem/intermediaries/_oem-quotes-users/oem-quotes-users.entity';
+import { QuoteUserTypeEnum } from '../../src/oem/intermediaries/_oem-quotes-users/oem-quotes-users.enums/quoteUserTypeEnum';
+import CreateOemApprovalQueuePriorities from '../../src/oem/seeds/create-oem-approval-queue-priorities.seed';
 import { initPolicy } from '../test.utils/init-policy.util';
 import { enable } from 'async-local-storage';
 import initModuleFixture from '../test.utils/init-module-fixture.util';
-import { OemQuoteApprovalQueue } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.entity';
-import { QuoteApprovalQueueTargetTypeEnum } from '../oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-target-type.enum';
-import { OemExternalUserEntity } from '../oem/main/oem-external-users/oem-external-user.entity';
+import { OemQuoteApprovalQueue } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.entity';
+import { QuoteApprovalQueueTargetTypeEnum } from '../../src/oem/intermediaries/_oem-approval-queues/_oem-quote-approval-queues/oem-quote-approval-queue.enums/quote-approval-queue-target-type.enum';
+import { OemExternalUserEntity } from '../../src/oem/main/oem-external-users/oem-external-user.entity';
 
 describe('QuotesExternalUsersController (e2e)', () => {
   jest.setTimeout(50000);
