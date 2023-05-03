@@ -1,3 +1,15 @@
+## [1.5.8](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.7...v1.5.8) (2023-04-28)
+
+
+### Bug Fixes
+
+* **temporary:** disable is exists rule validators; ([369d9e3](https://bitbucket.org/bloodandtreasure/vendori-api/commits/369d9e39297738a8534a56007a4f576d1ae6214d))
+* **VEN-2174, VEN-2710:** fix bulk delete, fix saleforce get profile ([e5e2cd7](https://bitbucket.org/bloodandtreasure/vendori-api/commits/e5e2cd736b3313244e0eba5482f3908134cb93a6))
+* **VEN-2449:** show recently viewed quotes and vendos only read by the authorized user ([f1a76cd](https://bitbucket.org/bloodandtreasure/vendori-api/commits/f1a76cde4dfc9e0aeff7be4e28c7f4a7c7e42149))
+* **VEN-2625:** fix approval queue for fixing quote status of expiration ([9c5c196](https://bitbucket.org/bloodandtreasure/vendori-api/commits/9c5c1968685df4bd6d559953fe43c29a71c7dd17))
+
+
+
 ## [1.5.7](https://bitbucket.org/bloodandtreasure/vendori-api/compare/v1.5.6...v1.5.7) (2023-04-28)
 
 

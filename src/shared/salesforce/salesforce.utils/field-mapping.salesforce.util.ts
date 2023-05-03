@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as moment from 'moment-timezone';
 
 import { OemCustomerAddresses } from '../../../oem/intermediaries/_oem-customer-addresses/oem-customer-addresses.entity';
 import { OemQuotesProducts } from '../../../oem/intermediaries/_oem-quotes-products/oem-quotes-products.entity';
@@ -263,16 +264,57 @@ export function quoteProductFieldMapping(quotes: OemQuoteEntity[]) {
   return [quoteProductsToCreate, quoteProductsToUpdate];
 }
 
-export function assetFieldMapping(quote: OemQuoteEntity) {
-  return quote.quotesProducts.reduce((acc: any[], quoteProduct) => {
-    if (!quoteProduct.product.sfProductId) return acc;
-    acc.push({
-      Name: quoteProduct.product.productName,
-      AccountId: '001DN000003w5BaYAI',
-      Product2Id: quoteProduct.product.sfProductId,
-    });
-    return acc;
-  }, []);
+export function assetFieldMapping(
+  quote: OemQuoteEntity,
+  quoteProduct: OemQuotesProducts,
+  customerProductId: number,
+) {
+  return {
+    Vendori_Asset_Id__c: customerProductId,
+    Name: quoteProduct.product.productName,
+    AccountId: quote.customer.salesOrganizationId,
+    Product2Id: quoteProduct.product.sfProductId,
+    Quantity: quoteProduct.quantity,
+    OriginalQuantity__c: quoteProduct.quantity,
+    Partofbundle__c: Boolean(quoteProduct.bundleId),
+    Active_Product__c: true,
+    ...(quoteProduct.product.productDescription && {
+      Description: quoteProduct.product.productDescription,
+    }),
+    ...(quoteProduct.endDate && {
+      End_Date__c: moment(quoteProduct.endDate).format('YYYY-MM-DD'),
+    }),
+    ...(quoteProduct.startDate && {
+      Start_Date__c: moment(quoteProduct.startDate).format('YYYY-MM-DD'),
+    }),
+    List_Price__c: _.get(quoteProduct.lockedFields, 'listPrice', 0),
+    ...(quote.opportunityId && {
+      Original_Opportunity__c: quote.opportunityId,
+    }),
+    ...(quoteProduct.sfOpportunityProductId && {
+      Original_Opporutnity_Product__c: quoteProduct.sfOpportunityProductId,
+    }),
+    Bundle_Header__c: Boolean(quoteProduct.bundleId),
+    // ParentId: // If product is bundled, should create asset first and then use that asset id as parentId
+    // Parent_Product__c: // sfProduct id of parent asset
+    // ...(quoteProduct.product.pricingModel.pricingType && {PricingType__c: quoteProduct.product.pricingModel.pricingType}), // Not match
+    // ...(quoteProduct.product.pricingModel.modelType && {PricingModelType__c: quoteProduct.product.pricingModel.modelType}), // Not match
+    UnitCost__c: _.get(quoteProduct.lockedFields, 'perUnitPerYear', 0),
+    // Unit_Duration__c: _.get(quoteProduct.lockedFields, 'pricingModel.unitDuration', ''), // Value should be matched to picklist of salesforce
+    // Unit_Metric__c: _.get(quoteProduct.lockedFields, 'pricingModel.unitMetric', ''), // Value should be matched to picklist of salesforce
+    ...(quoteProduct.product.billingFrequency && {
+      BillingFrequencyNotes__c: quoteProduct.product.billingFrequency,
+    }),
+    ...(quote.signedDate && {
+      PurchaseDate: moment(quote.signedDate).format('YYYY-MM-DD'),
+    }),
+    ...(quoteProduct.endDate && {
+      UsageEndDate: moment(quoteProduct.endDate).format('YYYY-MM-DD'),
+    }),
+    ...(quoteProduct.startDate && {
+      StartDateUTC__c: moment(quoteProduct.startDate).utc().toISOString(),
+    }),
+  };
 }
 
 export function quoteContactFieldMapping(quotesContacts: OemQuotesContacts[]) {

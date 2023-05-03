@@ -236,11 +236,12 @@ export class SalesforceService {
     }
   }
 
-  public async createAsset(quote: OemQuoteEntity) {
+  public async createAsset(assetsBody: any[]) {
     try {
-      const body = SFFieldMappingUtil.assetFieldMapping(quote);
-      if (body.length) {
-        this.handleSFBulkCreateJob('Asset', 'insert', body);
+      if (assetsBody.length) {
+        this.handleSFBulkCreateJob('Asset', 'upsert', assetsBody, null, {
+          extIdField: 'Vendori_Asset_Id__c',
+        });
       }
     } catch (error) {
       const functionName = this.createAsset.name;
@@ -448,7 +449,7 @@ export class SalesforceService {
       // fired when batch request is queued in server.
       that.logger.error({
         func: `${objectName}.${operation}/bulkCreation.error`,
-        error: batchInfo,
+        error: `${batchInfo}`,
       });
     });
     batch.on('queue', function (batchInfo) {

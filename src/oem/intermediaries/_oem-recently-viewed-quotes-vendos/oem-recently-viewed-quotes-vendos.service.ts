@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import {
-  Brackets,
-  Repository,
-  SelectQueryBuilder,
-} from 'typeorm';
+import { Brackets, Repository, SelectQueryBuilder } from 'typeorm';
 import {
   OemRecentlyViewedQuotesVendos,
   RecentlyViewedQuotesVendos,
@@ -23,59 +19,6 @@ export class OemRecentlyViewedQuotesVendosService extends TypeOrmCrudService<Oem
     public repo: Repository<OemRecentlyViewedQuotesVendos>,
   ) {
     super(repo);
-  }
-
-  private _applyUserFilter(
-    qb: SelectQueryBuilder<OemRecentlyViewedQuotesVendos>,
-    filteredUserId: number,
-  ): SelectQueryBuilder<OemRecentlyViewedQuotesVendos> {
-    return qb
-      .leftJoin('quote.usersQuotes', 'quoteUsers')
-      .leftJoin('vendo.vendosUsers', 'vendoUsers')
-      .andWhere(
-        new Brackets((qb) => {
-          qb.orWhere('quoteUsers.userId = :quoteUserId', {
-            quoteUserId: filteredUserId,
-          })
-            .orWhere('vendoUsers.userId = :vendoUserId', {
-              vendoUserId: filteredUserId,
-            })
-            .orWhere('quote.ownerUserId = :quoteOwnerUserId', {
-              quoteOwnerUserId: filteredUserId,
-            })
-            .orWhere('vendo.ownerUserId = :vendoOwnerUserId', {
-              vendoOwnerUserId: filteredUserId,
-            });
-        }),
-      );
-  }
-
-  private _applyGeoHierarchyFilter(
-    qb: SelectQueryBuilder<OemRecentlyViewedQuotesVendos>,
-    filteredGeoHierarchyIds: Array<number>,
-  ): SelectQueryBuilder<OemRecentlyViewedQuotesVendos> {
-    return qb
-      .leftJoin('quote.geoHierarchy', 'quoteGeoHierarchy')
-      .leftJoin('vendo.geoHierarchy', 'vendoGeoHierarchy')
-      .andWhere(
-        new Brackets((qb) => {
-          qb.orWhere(
-            `quoteGeoHierarchy.isActive = TRUE
-              AND quoteGeoHierarchy.isEnabled = TRUE
-              AND quoteGeoHierarchy.hierarchyId IN (:...quoteGeoHierarchyIds)`,
-            {
-              quoteGeoHierarchyIds: filteredGeoHierarchyIds,
-            },
-          ).orWhere(
-            `vendoGeoHierarchy.isActive = TRUE
-              AND vendoGeoHierarchy.isEnabled = TRUE
-              AND vendoGeoHierarchy.hierarchyId IN (:...vendoGeoHierarchyIds)`,
-            {
-              vendoGeoHierarchyIds: filteredGeoHierarchyIds,
-            },
-          );
-        }),
-      );
   }
 
   private _filterNameUUID(
@@ -148,9 +91,10 @@ export class OemRecentlyViewedQuotesVendosService extends TypeOrmCrudService<Oem
       .leftJoin('recently_viewed_vendos_quotes.quote', 'quote')
       .leftJoin('recently_viewed_vendos_quotes.vendo', 'vendo')
       .where(
-        'recently_viewed_vendos_quotes.isEnabled = TRUE AND recently_viewed_vendos_quotes.companyId = :companyId',
+        'recently_viewed_vendos_quotes.isEnabled = TRUE AND recently_viewed_vendos_quotes.companyId = :companyId AND recently_viewed_vendos_quotes.userId = :userId',
         {
-          companyId: req['user']['companyId'],
+          companyId: req['user'].companyId,
+          userId: req['user'].userId,
         },
       );
 
@@ -159,28 +103,12 @@ export class OemRecentlyViewedQuotesVendosService extends TypeOrmCrudService<Oem
       .leftJoinAndSelect('recently_viewed_vendos_quotes.quote', 'quote')
       .leftJoinAndSelect('recently_viewed_vendos_quotes.vendo', 'vendo')
       .where(
-        'recently_viewed_vendos_quotes.isEnabled = TRUE AND recently_viewed_vendos_quotes.companyId = :companyId',
+        'recently_viewed_vendos_quotes.isEnabled = TRUE AND recently_viewed_vendos_quotes.companyId = :companyId AND recently_viewed_vendos_quotes.userId = :userId',
         {
-          companyId: req['user']['companyId'],
+          companyId: req['user'].companyId,
+          userId: req['user'].userId,
         },
       );
-
-    const filteredUserId = req['user']['dataAccessFilter']?.userId;
-
-    if (filteredUserId) {
-      total = this._applyUserFilter(total, filteredUserId);
-      recently = this._applyUserFilter(recently, filteredUserId);
-    }
-
-    const filteredGeoHierarchyIds =
-      req['user']['dataAccessFilter']?.geoHierarchyIds;
-    if (filteredGeoHierarchyIds?.length) {
-      total = this._applyGeoHierarchyFilter(total, filteredGeoHierarchyIds);
-      recently = this._applyGeoHierarchyFilter(
-        recently,
-        filteredGeoHierarchyIds,
-      );
-    }
 
     if (quoteName || vendoName || quoteUUID || vendoUUID) {
       recently = this._filterNameUUID(

@@ -1,3 +1,4 @@
+//TODO: there is should be more smarter algorithm, bc it brakes system if data is empty, probably need to integrate with seeds
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class addGlobalHierarchy1682092510950 implements MigrationInterface {

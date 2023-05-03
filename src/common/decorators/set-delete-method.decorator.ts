@@ -79,7 +79,8 @@ export function SetDeleteMethod<T extends { new (...args: any[]): any }>(
               ...foreignKeys.map(
                 (fk) =>
                   new Object({
-                    [fk.propertyPath]: deactivatedExemplar[primaryKey],
+                    [fk.propertyPath || primaryKey]:
+                      deactivatedExemplar[primaryKey],
                   }),
               ),
             ],

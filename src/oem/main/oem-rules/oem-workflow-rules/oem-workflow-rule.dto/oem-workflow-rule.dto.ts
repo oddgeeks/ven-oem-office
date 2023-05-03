@@ -20,6 +20,7 @@ import { QuantifiersEnum } from '../oem-workflow-rule.enums/quantifiers.enum';
 import { PredicatesEnum } from '../oem-workflow-rule.enums/predicates.enum';
 import { IsGeoHierarchy } from '../../../oem-hierarchies/oem-hierarchy.validators/oem-hierarchy.validators';
 import { IsWorkflowRuleLogicValid } from '../oem-workflow-rule.validators/workflow-rule-logic.validator';
+import { IsWorkflowRuleExists } from '../oem-workflow-rule.validators/is-workflow-rule-exists.validator';
 
 export class WorkflowRuleDto {
   constructor(data: Partial<WorkflowRule> = {}) {
@@ -59,6 +60,7 @@ export class WorkflowRuleDto {
   @Transform(({ value }) => {
     return String(value)?.trim();
   })
+    //@Validate(IsWorkflowRuleExists)
   workflowRuleName: string;
 
   /**

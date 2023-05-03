@@ -58,8 +58,8 @@ export default class CreateOemUsers implements Seeder {
       geoHierarchyId: 1,
       roleId: 5,
       lastName: 'SalesForce',
-      notificationEmail: 'oscar@bloodandtreasure.com',
-      ssoLoginEmail: 'oscar@bloodandtreasure.com',
+      notificationEmail: 'oscar@vendori.com',
+      ssoLoginEmail: 'oscar@vendori.com',
       isExternal: false,
       isHideWelcomeText: false,
     });

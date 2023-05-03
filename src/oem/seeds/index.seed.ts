@@ -33,6 +33,8 @@ import CreateOemWorkflowRules from './create-oem-workflow-rules.seed';
 import CreateOemCustomerAddresses from './create-oem-customer-addresses.seed';
 import CreateOemCompanyChannelSettings from './create-oem-company-channel-settings.seed';
 import CreateOemCompanyChannels from './create-oem-company-channels.seed';
+import CreateDemoOemHierarchyLevels from './demo/create-demo-oem-hierarchy-levels.seed';
+import CreateDemoOemHierarchies from './demo/create-demo-oem-hierarchies.seed';
 
 /**
  * Need to save an order, bc downstream relations depend with above.
@@ -50,8 +52,9 @@ export default class IndexSeed implements Seeder {
     await runSeeder(CreateOemCustomerAddresses);
 
     await runSeeder(CreateOemRoles());
-    await runSeeder(CreateOemHierarchyLevels);
-    await runSeeder(CreateOemHierarchies);
+    await runSeeder(CreateDemoOemHierarchyLevels({companyId: 1}));
+    await runSeeder(CreateDemoOemHierarchies({companyId: 1}));
+
     await runSeeder(CreateOemUsers);
 
     await runSeeder(CreateOemCompanyPrograms);

@@ -192,6 +192,20 @@ describe('PricingModelController (e2e)', () => {
     });
   });
 
+  describe(`${METHODS.POST.toUpperCase()} ${PATH}/:id/clone`, () => {
+    const method = METHODS.POST;
+    it(`should clone a ${MODEL}`, async () => {
+      const res = await request(server)
+        [method](`${PATH}/${receivedData[MODEL_ID]}/clone`)
+        .set('Origin', 'demo.localhost');
+      console.debug(res.body);
+      expect(res.status).toEqual(getMetaData(method).expectedStatus);
+      expect(res.body.data.modelName).toEqual(
+        `Cloned from ${comparedData.modelName}`,
+      );
+    });
+  });
+
   describe(`${METHODS.DELETE.toUpperCase()} ${PATH}`, () => {
     const method = METHODS.DELETE;
     it(`should ${getMetaData(method).action} a ${MODEL}`, async (done) => {
@@ -200,6 +214,26 @@ describe('PricingModelController (e2e)', () => {
         .set('Origin', 'demo.localhost');
       console.debug(res.body);
       expect(res.status).toBe(getMetaData(method).expectedStatus);
+      done();
+    });
+  });
+
+
+  describe(`${METHODS.DELETE.toUpperCase()} ${PATH}`, () => {
+    const method = METHODS.POST;
+    it(`should ${getMetaData(method).action} a ${MODEL}`, async (done) => {
+      const res = await request(server)
+        [method](PATH + '/bulk-delete')
+        .set('Origin', 'demo.localhost')
+        .send({
+          bulk: [
+            { pricingModelId: 1 },
+            { pricingModelId: 2 },
+            { pricingModelId: 3 },
+          ],
+        });
+      console.debug(res.body);
+      expect(res.status).toBe(200);
       done();
     });
   });

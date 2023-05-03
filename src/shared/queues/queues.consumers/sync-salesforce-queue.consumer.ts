@@ -10,6 +10,8 @@ import { OemQuoteEntity } from '../../../oem/main/oem-quotes/oem-quote.entity';
 import { SalesforceService } from '../../../shared/salesforce/salesforce.service';
 import { OemProductEntity } from '../../../oem/main/oem-products/oem-product.entity';
 import { OemQuotesContacts } from '../../../oem/intermediaries/_oem-quotes-contacts/oem-quotes-contacts.entity';
+import { OemCustomersProducts } from '../../../oem/intermediaries/_oem-customers-products/oem-customers-products.entity';
+import * as SFFieldMappingUtil from '../../salesforce/salesforce.utils/field-mapping.salesforce.util';
 
 @Processor(QueueNames.SyncSalesForce)
 export class SyncSalesForceQueueConsumer {
@@ -26,6 +28,8 @@ export class SyncSalesForceQueueConsumer {
     private readonly productRepo: Repository<OemProductEntity>,
     @InjectRepository(OemQuotesContacts)
     private readonly quoteContactRepo: Repository<OemQuotesContacts>,
+    @InjectRepository(OemCustomersProducts)
+    private readonly customerProductRepo: Repository<OemCustomersProducts>,
     private salesforceService: SalesforceService,
   ) {}
 
@@ -114,11 +118,36 @@ export class SyncSalesForceQueueConsumer {
         .leftJoinAndSelect('quotesProducts.product', 'product')
         .leftJoinAndSelect('product.pricingModel', 'pricingModel')
         .getOne();
+      const assetsBody: any[] = [];
       // TODO
       // Call transformer service to transform vendori quote to SF data before calling SF service.
-      if (quote) {
-        await this.salesforceService.createAsset(quote);
+      for (const quoteProduct of quote.quotesProducts) {
+        const body = {
+          productId: quoteProduct.productId,
+          bundleId: quoteProduct.bundleId,
+          customerId: quote.customerId,
+          companyId: quote.companyId,
+          quantity: quoteProduct.quantity,
+          endDate: quoteProduct.endDate,
+          customerPrice: 0,
+          netPrice: 0,
+        };
+        const res = await this.customerProductRepo.insert(body);
+        const customerProductId = res.identifiers[0]['customerProductId'];
+
+        // TODO
+        // If product is bundled, need to create parent asset with this bundle
+
+        if (quoteProduct.product.sfProductId) {
+          const assetBody = SFFieldMappingUtil.assetFieldMapping(
+            quote,
+            quoteProduct,
+            customerProductId,
+          );
+          assetsBody.push(assetBody);
+        }
       }
+      await this.salesforceService.createAsset(assetsBody);
       await job.progress(100);
     } catch (error) {
       this.logger.error({

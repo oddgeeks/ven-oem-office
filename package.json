@@ -1,7 +1,7 @@
 {
   "name": "vendori-api",
   "description": "",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "author": "",
   "dependencies": {
     "@casl/ability": "^6.1.1",
@@ -162,7 +162,7 @@
   "scripts": {
     "build": "nest build;",
     "db:migrate": "npm run typeorm -- migration:run",
-    "db:reset": "npm run schema:drop && npm run schema:sync && npm run db:seed",
+    "db:reset": "npm run schema:drop && npm run db:migrate && npm run db:seed",
     "db:seed": "npm run build && npm run typeorm-seeding seed",
     "db:seed:config": "npm run typeorm-seeding config",
     "fix:package": "fixpack",

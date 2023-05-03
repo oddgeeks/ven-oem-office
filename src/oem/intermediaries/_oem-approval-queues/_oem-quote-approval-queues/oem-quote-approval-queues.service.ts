@@ -1105,7 +1105,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1513,7 +1513,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
       logoURL: VENDORI_LOGO_URL,
       CTA: `${APP_ROOT_URL}/quotes/${quote.quoteId}`,
       subject,
-      body: `Quote ${quote.quoteName} has been ${approvalStatus}.<br/><br/> <strong> ${quote.company.companyName} | ${netAmount} | ${address.region} </strong>`,
+      body: `Quote ${quote.quoteName} has been ${approvalStatus}.<br/><br/> <strong> ${quote.company.companyName} | ${netAmount} | ${address?.region} </strong>`,
       companyAddress: VENDORI_COMPANY_ADDRESS,
       emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
       isVendo: false,
@@ -1525,7 +1525,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1712,7 +1712,11 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
       logoURL: VENDORI_LOGO_URL,
       CTA: `${APP_ROOT_URL}/quotes/${quote.quoteId}`,
       subject,
-      body: `${rejectedRole} rejected the quote.<br/><br/> <strong> ${quote.company.companyName} | ${netAmount} | ${address.region} </strong>`,
+      body: `${rejectedRole} rejected the quote.<br/><br/> <strong> ${
+        quote.company.companyName
+      } | ${netAmount} ${
+        address?.region ? `| ${address.region}` : ''
+      } </strong>`,
       companyAddress: VENDORI_COMPANY_ADDRESS,
       emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
       isVendo: false,
@@ -1724,7 +1728,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1893,7 +1897,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
     const customerAddress = this._getCustomerAddress(quote.customer);
     //TODO: why we do not follow DRY (we have the same functionality and messages in batchEmail, it is annoying to fix something)
     console.log(customerAddress);
-    if (emailList.length > 0 && customerAddress) {
+    if (emailList.length > 0) {
       const subject = `Quote ${quote.quoteName} has been expired`;
       const netAmount = newDineroDollars(
         quote.netAmount,
@@ -1904,7 +1908,13 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
         logoURL: VENDORI_LOGO_URL,
         CTA: `${APP_ROOT_URL}/quotes/${quote.quoteId}`,
         subject,
-        body: `The expiration date ${quote.expiresAt} has been reached and the quote is now expired.<br/><br/> <strong> ${quote.company.companyName} | ${netAmount} | ${customerAddress.region} </strong>`,
+        body: `The expiration date ${
+          quote.expiresAt
+        } has been reached and the quote is now expired.<br/><br/> <strong> ${
+          quote.company.companyName
+        } | ${netAmount} ${
+          customerAddress?.region ? `| ${customerAddress?.region}` : ''
+        } </strong>`,
         companyAddress: VENDORI_COMPANY_ADDRESS,
         emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
         isVendo: false,
@@ -2131,7 +2141,7 @@ export class OemQuoteApprovalQueuesService extends TypeOrmCrudService<OemQuoteAp
           name: 'Vendori',
           email: VENDORI_SUPPORT_EMAIL,
         },
-        to: emailList.map((el) => _.omit(el, 'userId')),
+        to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
         templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
         dynamicTemplateData,
       };

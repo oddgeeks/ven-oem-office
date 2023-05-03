@@ -55,7 +55,7 @@ export class SavedAlertRuleDto {
     return String(value)?.trim();
   })
     //TODO: should be saved-alert-rule or branding type
-  @Validate(IsSavedAlertRuleExists)
+  //@Validate(IsSavedAlertRuleExists)
   name: string;
 
   /**

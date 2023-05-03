@@ -958,7 +958,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1208,6 +1208,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
   }
 
   private _getCustomerAddress(customer: OemCustomerEntity) {
+    if (!customer) return null;
     const billingAddress = customer.customerAddresses
       .map((customerAddr) => customerAddr.address)
       .find((addr) => addr.addressType === AddressTypeEnum.BILLING);
@@ -1324,7 +1325,13 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
       logoURL: VENDORI_LOGO_URL,
       CTA: `${APP_ROOT_URL}/vendos/${vendo.vendoId}`,
       subject,
-      body: `Vendo ${vendo.vendoName} has been ${approvalStatus}.<br/><br/> <strong> ${vendo.company.companyName} | ${customerAddress.region} </strong>`,
+      body: `Vendo ${
+        vendo.vendoName
+      } has been ${approvalStatus}.<br/><br/> <strong> ${
+        vendo.company.companyName
+      } ${
+        customerAddress?.region ? `| ${customerAddress?.region}` : ''
+      } </strong>`,
       companyAddress: VENDORI_COMPANY_ADDRESS,
       emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
       isVendo: false,
@@ -1336,7 +1343,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1517,7 +1524,11 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
       logoURL: VENDORI_LOGO_URL,
       CTA: `${APP_ROOT_URL}/vendos/${vendo.vendoId}`,
       subject,
-      body: `${rejectedRole} rejected the vendo.<br/><br/> <strong> ${vendo.company.companyName} | ${customerAddress.region} </strong>`,
+      body: `${rejectedRole} rejected the vendo.<br/><br/> <strong> ${
+        vendo.company.companyName
+      } ${
+        customerAddress?.region ? `| ${customerAddress?.region}` : ''
+      } </strong>`,
       companyAddress: VENDORI_COMPANY_ADDRESS,
       emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
       isVendo: true,
@@ -1529,7 +1540,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
         name: 'Vendori',
         email: VENDORI_SUPPORT_EMAIL,
       },
-      to: emailList.map((el) => _.omit(el, 'userId')),
+      to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
       templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
       dynamicTemplateData,
     };
@@ -1700,7 +1711,13 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
         logoURL: VENDORI_LOGO_URL,
         CTA: `${APP_ROOT_URL}/vendos/${vendo.vendoId}`,
         subject,
-        body: `The expiration date ${vendo.expiresAt} has been reached and the vendo is now expired.<br/><br/> <strong> ${vendo.company.companyName} | ${customerAddress.region} </strong>`,
+        body: `The expiration date ${
+          vendo.expiresAt
+        } has been reached and the vendo is now expired.<br/><br/> <strong> ${
+          vendo.company.companyName
+        } ${
+          customerAddress?.region ? `| ${customerAddress?.region}` : ''
+        } </strong>`,
         companyAddress: VENDORI_COMPANY_ADDRESS,
         emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
         isVendo: false,
@@ -1712,7 +1729,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
           name: 'Vendori',
           email: VENDORI_SUPPORT_EMAIL,
         },
-        to: emailList.map((el) => _.omit(el, 'userId')),
+        to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
         templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
         dynamicTemplateData,
       };
@@ -1909,7 +1926,13 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
         logoURL: vendo.customer?.logoUrl,
         CTA: `${APP_ROOT_URL}/vendos/${vendo.vendoId}`,
         subject,
-        body: `At ${transactedTime} on ${transactedDate}, ${vendo.customer.customerName} accepted Vendo ${vendo.vendoName}.<br/><br/> <strong> ${vendo.customer.customerName} | ${customerAddress.region} </strong>`,
+        body: `At ${transactedTime} on ${transactedDate}, ${
+          vendo.customer.customerName
+        } accepted Vendo ${vendo.vendoName}.<br/><br/> <strong> ${
+          vendo.customer.customerName
+        } ${
+          customerAddress.region ? `| ${customerAddress.region}` : ''
+        } </strong>`,
         companyAddress: VENDORI_COMPANY_ADDRESS,
         emailverify: `This message was sent to your email because you're a user in the Vendori account. To manage future email notifications, click https://demo.vendori.com/manage-alerts or go to your notifications page within the app.`,
         isVendo: false,
@@ -1921,7 +1944,7 @@ export class OemVendoApprovalQueuesService extends TypeOrmCrudService<OemVendoAp
           name: 'Vendori',
           email: VENDORI_SUPPORT_EMAIL,
         },
-        to: emailList.map((el) => _.omit(el, 'userId')),
+        to: _.unionBy(emailList, 'email').map((el) => _.omit(el, 'userId')),
         templateId: MAIL_QUOTE_VENDO_CHANGE_TEMPLATE_ID,
         dynamicTemplateData,
       };

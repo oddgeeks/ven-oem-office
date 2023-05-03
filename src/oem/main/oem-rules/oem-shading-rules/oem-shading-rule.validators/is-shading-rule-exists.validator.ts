@@ -12,7 +12,7 @@ import { ValidatorConstraint } from 'class-validator';
 export class IsShadingRuleExists extends IsExists<OemShadingRule> {
   constructor(
     @InjectRepository(OemShadingRule)
-      repo: Repository<OemShadingRule>,
+    repo: Repository<OemShadingRule>,
   ) {
     super(repo);
   }

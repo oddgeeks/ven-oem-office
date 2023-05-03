@@ -53,7 +53,7 @@ export class DiscountRuleDto {
   @Transform(({ value }) => {
     return String(value)?.trim();
   })
-  @Validate(IsDiscountRuleExists)
+  //@Validate(IsDiscountRuleExists)
   discountRuleName: string;
 
   /**

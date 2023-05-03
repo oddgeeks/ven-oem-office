@@ -60,7 +60,7 @@ export class ShadingRuleDto {
   @Transform(({ value }) => {
     return String(value)?.trim();
   })
-  @Validate(IsShadingRuleExists)
+  //@Validate(IsShadingRuleExists)
   shadingRuleName: string;
 
   /**

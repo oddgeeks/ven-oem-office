@@ -40,50 +40,50 @@ export class QueuesService implements OnModuleInit {
         return;
       }
 
-      this.quoteApprovalQueue.add(
-        {},
-        {
-          // every minute
-          repeat: { every: 60000 },
+      // this.quoteApprovalQueue.add(
+      //   {},
+      //   {
+      //     // every minute
+      //     repeat: { every: 60000 },
 
-          // keep the history for a week
-          removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
-          removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
-        },
-      );
+      //     // keep the history for a week
+      //     removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
+      //     removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
+      //   },
+      // );
 
-      this.vendoApprovalQueue.add(
-        {},
-        {
-          // every minute
-          repeat: { every: 60000 },
+      // this.vendoApprovalQueue.add(
+      //   {},
+      //   {
+      //     // every minute
+      //     repeat: { every: 60000 },
 
-          // keep the history for a week
-          removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
-          removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
-        },
-      );
+      //     // keep the history for a week
+      //     removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
+      //     removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
+      //   },
+      // );
 
-      this.batchedEmailQueue.add(
-        {},
-        {
-          // every minute
-          repeat: { every: 60000 },
+      // this.batchedEmailQueue.add(
+      //   {},
+      //   {
+      //     // every minute
+      //     repeat: { every: 60000 },
 
-          // keep the history for a week
-          removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
-          removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
-        },
-      );
+      //     // keep the history for a week
+      //     removeOnComplete: config.BULL_HISTORY_TTL_HOURS * 60,
+      //     removeOnFail: config.BULL_HISTORY_TTL_HOURS * 60,
+      //   },
+      // );
 
-      this.syncSalesforceQueue.add(JobNames.BatchSyncQuotesToSF, null, {
-        // 0 0 0 * * *: every midnight
-        repeat: { cron: '0 0 0 * * *' },
-        // delay: 5000,
+      // this.syncSalesforceQueue.add(JobNames.BatchSyncQuotesToSF, null, {
+      //   // 0 0 0 * * *: every midnight
+      //   repeat: { cron: '0 0 0 * * *' },
+      //   // delay: 5000,
 
-        removeOnFail: 7,
-        removeOnComplete: 7,
-      });
+      //   removeOnFail: 7,
+      //   removeOnComplete: 7,
+      // });
 
       this.logger.log(`QueuesService HealthCheck is OK on ${new Date()}`);
     });

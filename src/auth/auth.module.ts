@@ -10,7 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { OktaStrategy } from './strategies/okta.strategy';
 import { OemUsersService } from '../oem/main/oem-users/oem-users.service';
-import { getConnectionToken } from '@nestjs/typeorm';
+import { getConnectionToken, getDataSourceToken } from '@nestjs/typeorm';
 import { OemUserEntity } from '../oem/main/oem-users/oem-user.entity';
 import { OemHierarchiesModule } from '../oem/main/oem-hierarchies/oem-hierarchies.module';
 import {
@@ -94,13 +94,13 @@ const SalesforceStrategyFactory = {
       provide: 'UserRepository',
       useFactory: (connection: Connection) =>
         connection.getRepository(OemUserEntity),
-      inject: [getConnectionToken('MASTER_CONNECTION')],
+      inject: [getDataSourceToken('MASTER_CONNECTION')],
     },
     {
       provide: 'CompanyRepository',
       useFactory: (connection: Connection) =>
         connection.getRepository(OemCompanyEntity),
-      inject: [getConnectionToken('MASTER_CONNECTION')],
+      inject: [getDataSourceToken('MASTER_CONNECTION')],
     },
     AuthService,
     LocalStrategy,

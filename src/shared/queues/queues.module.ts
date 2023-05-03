@@ -20,6 +20,7 @@ import { SalesforceModule } from '../salesforce/salesforce.module';
 import { OemQuoteEntity } from '../../oem/main/oem-quotes/oem-quote.entity';
 import { OemProductEntity } from '../../oem/main/oem-products/oem-product.entity';
 import { OemQuotesContacts } from '../../oem/intermediaries/_oem-quotes-contacts/oem-quotes-contacts.entity';
+import { OemCustomersProducts } from '@src/oem/intermediaries/_oem-customers-products/oem-customers-products.entity';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { OemQuotesContacts } from '../../oem/intermediaries/_oem-quotes-contacts
       OemQuoteEntity,
       OemProductEntity,
       OemQuotesContacts,
+      OemCustomersProducts,
     ]),
     BullModule.forRoot({
       redis: config.redis,

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-salesforce-oauth2';
 import { AuthService } from '../auth.service';
@@ -18,6 +18,8 @@ export class SalesforceStrategy extends PassportStrategy(
       clientSecret: config.clientSecret,
       callbackURL: config.callbackURL,
       authorizationURL: config.authorizationURL,
+      tokenURL: config.tokenURL,
+      profileURL: config.profileURL,
       // scope: config.scope || ['email'],
     });
   }
