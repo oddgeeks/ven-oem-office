@@ -1,7 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { copyMetadata } from '../../../../utils/copy-metadata.util';
-
 /**
  * Decorator for injecting current user to ParsedRequest() for CRUD_TYPEORM FRAMEWORK;
  * MAKE sure that the first param should be req: ParsedRequest
@@ -60,7 +59,7 @@ export function SetCurrentUser<T extends { new (...args: any[]): any }>(
         Object.getPrototypeOf(target.prototype),
       );
       */
-      //console.table(descriptors);
+      // console.table(descriptors);
       for (const [propertyName, descriptor] of Object.entries(descriptors)) {
         const isMethod =
           typeof descriptor.value == 'function' &&
@@ -84,7 +83,7 @@ export function SetCurrentUser<T extends { new (...args: any[]): any }>(
           copyMetadata(originalMethod, descriptor.value);
         }
         // manually override @Override decorator (support basic method following TypeOrm CRUD nestjs docs)
-        // TODO: need to investigate: when we use a class decorator in some reason it do not go through controller,
+        // TODO: Need to investigate: when we use a class decorator in some reason it do not go through controller,
         // if we define to propertyBase then it goes, but params decorators don't work
         if (
           target.name == 'OemUsersController' &&

@@ -18,6 +18,7 @@ import { OemQuotesContacts } from '../../oem/intermediaries/_oem-quotes-contacts
 // Entities
 import { OemQuoteEntity } from '../../oem/main/oem-quotes/oem-quote.entity';
 import { OemQuotesProducts } from '../../oem/intermediaries/_oem-quotes-products/oem-quotes-products.entity';
+import { OemCustomersProducts } from '../../oem/intermediaries/_oem-customers-products/oem-customers-products.entity';
 
 //TODO: salesforce module shouldn't know about vendori structure, it should be responsible only for sending data @saleforce_sync
 //TODO: also need to use config service here @saleforce_sync
@@ -30,6 +31,7 @@ import { OemQuotesProducts } from '../../oem/intermediaries/_oem-quotes-products
       OemSalesforceIntegrationEntity,
       OemHierarchyEntity,
       OemQuotesContacts,
+      OemCustomersProducts,
     ]),
   ],
   providers: [

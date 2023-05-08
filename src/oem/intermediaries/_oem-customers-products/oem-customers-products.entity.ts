@@ -9,16 +9,16 @@ import {
 } from 'typeorm';
 import { OemCustomerEntity } from '../../main/oem-customers/oem-customer.entity';
 import { OemProductEntity } from '../../main/oem-products/oem-product.entity';
-import { MetadataEntity } from '../../../common/entities/metadata.entity';
 import { OemQuotesCustomerProducts } from '../_oem-quotes-customer-products/oem-quotes-customer-products.entity';
 import { OemBundleEntity } from '../../main/oem-bundles/oem-bundle.entity';
+import { SfCustomerProductMetadataEntity } from '../../../shared/salesforce/salesforce.entities.metadata/customer-product.metadata.entity';
 
 @Index('oem_customers_products_customer_id_idx', ['customerId'], {})
 @Index('oem_customers_products_product_id_idx', ['productId'], {})
 @Index('oem_customers_products_bundle_id_idx', ['bundleId'], {})
 @Index('oem_customers_products_pkey', ['customerProductId'], { unique: true }) //-- why no unique?
 @Entity('oem_customers_products', { schema: 'oem' })
-export class CustomersProducts extends MetadataEntity {
+export class CustomersProducts extends SfCustomerProductMetadataEntity {
   constructor(data: Partial<CustomersProducts> = {}) {
     super();
     Object.assign(this, data);

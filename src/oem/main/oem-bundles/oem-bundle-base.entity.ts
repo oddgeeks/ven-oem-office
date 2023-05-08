@@ -53,6 +53,14 @@ export class BundleBaseEntity extends MetadataEntity {
   })
   productAvailability: Array<ProductAvailabilityEnum>;
 
+  @Column({
+    type: 'character varying',
+    name: 'sf_product_id',
+    nullable: true,
+    default: null,
+  })
+  sfProductId: string | null;
+
   @Column('enum', {
     name: 'eligible_for',
     enum: Object.values(EligibleForEnum),

@@ -116,6 +116,7 @@ export class SyncSalesForceQueueConsumer {
         .leftJoinAndSelect('quotes.customer', 'customer')
         .leftJoinAndSelect('quotes.quotesProducts', 'quotesProducts')
         .leftJoinAndSelect('quotesProducts.product', 'product')
+        .leftJoinAndSelect('quotesProducts.bundle', 'bundle')
         .leftJoinAndSelect('product.pricingModel', 'pricingModel')
         .getOne();
       const assetsBody: any[] = [];
@@ -135,19 +136,35 @@ export class SyncSalesForceQueueConsumer {
         const res = await this.customerProductRepo.insert(body);
         const customerProductId = res.identifiers[0]['customerProductId'];
 
-        // TODO
         // If product is bundled, need to create parent asset with this bundle
+        let parentAssetId = '';
+        if (quoteProduct.bundleId && quoteProduct.bundle.sfProductId) {
+          const assetBody = SFFieldMappingUtil.assetFieldMapping(
+            quote,
+            quoteProduct,
+            customerProductId,
+            true,
+            null,
+          );
+          const res = await this.salesforceService.createSingleAsset(assetBody);
+          parentAssetId = res['id'];
+          await this.customerProductRepo.update(customerProductId, {
+            sfParentAssetId: parentAssetId,
+          });
+        }
 
         if (quoteProduct.product.sfProductId) {
           const assetBody = SFFieldMappingUtil.assetFieldMapping(
             quote,
             quoteProduct,
             customerProductId,
+            false,
+            parentAssetId,
           );
           assetsBody.push(assetBody);
         }
       }
-      await this.salesforceService.createAsset(assetsBody);
+      await this.salesforceService.createAssets(assetsBody);
       await job.progress(100);
     } catch (error) {
       this.logger.error({

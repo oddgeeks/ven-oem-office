@@ -17,6 +17,10 @@ export class CustomersProductsUpdateDto extends OmitType(
   customerPrice: number;
   @IsOptional()
   netPrice: number;
+  @IsOptional()
+  sfParentAssetId: string;
+  @IsOptional()
+  sfAssetId: string;
 }
 
 export { CustomersProductsUpdateDto as OemCustomersProductsUpdateDto };

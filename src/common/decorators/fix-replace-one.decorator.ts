@@ -13,7 +13,7 @@ import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
  * - then it would override the previous ones, bc child relations were got from point 1)
  * that's why we get this strange behavior decorator
  */
-export function FixUpdateReplaceOne<T extends { new (...args: any[]): any }>(
+export function FixUpdateReplaceOne<T extends { new(...args: any[]): any }>(
   target: T,
 ) {
   const decoratedClass = class extends target {

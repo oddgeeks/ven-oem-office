@@ -15,11 +15,9 @@ import { OemUserEntity } from '../../oem-users/oem-user.entity';
 @Index('oem_saved_alert_rules_pkey', ['savedAlertRuleId'], {
   unique: true,
 })
-@Index(
-  'oem_saved_alert_rules_rule_name_idx',
-  ['name', 'companyId'],
-  { unique: true },
-)
+@Index('oem_saved_alert_rules_rule_name_idx', ['name', 'companyId'], {
+  unique: true,
+})
 @Entity('oem_saved_alert_rules', { schema: 'oem' })
 export class SavedAlertRule {
   @PrimaryGeneratedColumn({ type: 'integer', name: 'saved_alert_rule_id' })

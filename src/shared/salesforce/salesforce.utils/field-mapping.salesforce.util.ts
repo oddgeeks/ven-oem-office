@@ -268,19 +268,26 @@ export function assetFieldMapping(
   quote: OemQuoteEntity,
   quoteProduct: OemQuotesProducts,
   customerProductId: number,
+  bundle?: boolean,
+  parentId?: string,
 ) {
   return {
-    Vendori_Asset_Id__c: customerProductId,
-    Name: quoteProduct.product.productName,
+    ...(!bundle && { Vendori_Asset_Id__c: customerProductId }),
+    Name: bundle
+      ? quoteProduct.bundle.bundleName
+      : quoteProduct.product.productName,
     AccountId: quote.customer.salesOrganizationId,
-    Product2Id: quoteProduct.product.sfProductId,
+    Product2Id: bundle
+      ? quoteProduct.bundle.sfProductId
+      : quoteProduct.product.sfProductId,
     Quantity: quoteProduct.quantity,
     OriginalQuantity__c: quoteProduct.quantity,
     Partofbundle__c: Boolean(quoteProduct.bundleId),
     Active_Product__c: true,
-    ...(quoteProduct.product.productDescription && {
-      Description: quoteProduct.product.productDescription,
-    }),
+    ...(!bundle &&
+      quoteProduct.product.productDescription && {
+        Description: quoteProduct.product.productDescription,
+      }),
     ...(quoteProduct.endDate && {
       End_Date__c: moment(quoteProduct.endDate).format('YYYY-MM-DD'),
     }),
@@ -295,8 +302,8 @@ export function assetFieldMapping(
       Original_Opporutnity_Product__c: quoteProduct.sfOpportunityProductId,
     }),
     Bundle_Header__c: Boolean(quoteProduct.bundleId),
-    // ParentId: // If product is bundled, should create asset first and then use that asset id as parentId
-    // Parent_Product__c: // sfProduct id of parent asset
+    ...(parentId && { parentId: parentId }),
+    ...(parentId && { Parent_Product__c: quoteProduct.bundle.sfProductId }),
     // ...(quoteProduct.product.pricingModel.pricingType && {PricingType__c: quoteProduct.product.pricingModel.pricingType}), // Not match
     // ...(quoteProduct.product.pricingModel.modelType && {PricingModelType__c: quoteProduct.product.pricingModel.modelType}), // Not match
     UnitCost__c: _.get(quoteProduct.lockedFields, 'perUnitPerYear', 0),

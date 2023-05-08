@@ -38,7 +38,7 @@ import { OemCompanyEntity } from '../oem-companies/oem-company.entity';
 import { QuotePinCodeDto } from './oem-quote.dto/oem-quote.pin-code.dto';
 import { SetController } from '../../../common/decorators/set-controller.decorator';
 import { DeleteCrudController } from '../../../common/controllers/delete-crud.controller';
-import { QuoteSalesforceContractDto } from './oem-quote.dto/oem-quote.salesforce-contract.dto';
+import { QuoteSalesforceUpdateDto } from '../../../shared/salesforce/salesforce.dto/quote.update.dto';
 
 @Crud({
   model: {
@@ -194,7 +194,7 @@ export class OemQuotesController implements CrudController<OemQuoteEntity> {
   @Post(`:id/update/salesforce`)
   async updateFromSalesforce(
     @ParsedRequest() req: CrudRequest,
-    @Body() dto: QuoteSalesforceContractDto,
+    @Body() dto: QuoteSalesforceUpdateDto,
   ) {
     return this.service.updateFromSalesforce(req, dto);
   }

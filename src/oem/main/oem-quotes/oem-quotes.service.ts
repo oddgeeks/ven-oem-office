@@ -55,7 +55,7 @@ import { OemCustomerEntity } from '../oem-customers/oem-customer.entity';
 import { OemQuotesProducts } from '../../../oem/intermediaries/_oem-quotes-products/oem-quotes-products.entity';
 import { EventsEnum } from '../../../shared/event-handler/event.enum/events.enum';
 import { ISalesforceMetaData } from '../../../shared/salesforce/salesforce.types/salesforce.sf_metadata.type';
-import { QuoteSalesforceContractDto } from './oem-quote.dto/oem-quote.salesforce-contract.dto';
+import { QuoteSalesforceUpdateDto } from '../../../shared/salesforce/salesforce.dto/quote.update.dto';
 
 @Injectable()
 @SetCurrentTenant
@@ -187,7 +187,7 @@ export class OemQuotesService extends TypeOrmCrudService<OemQuoteEntity> {
   @EventDispatcher<OemQuoteEntity>(EventsEnum.QUOTE_TRANSACTED)
   async updateFromSalesforce(
     req: CrudRequest,
-    dto: QuoteSalesforceContractDto,
+    dto: QuoteSalesforceUpdateDto,
   ): Promise<OemQuoteEntity> {
     return this.repo.manager.connection.transaction(async (manager) => {
       const quoteId = req.parsed.paramsFilter.find(

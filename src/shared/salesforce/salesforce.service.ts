@@ -25,6 +25,7 @@ import { OemProductEntity } from '../../oem/main/oem-products/oem-product.entity
 import { OemSalesforceIntegrationEntity } from '../../oem/main/oem-integrations/oem-salesforce-integrations/oem-salesforce-integration.entity';
 import { OemHierarchyEntity } from '../../oem/main/oem-hierarchies/oem-hierarchy.entity';
 import { OemQuotesContacts } from '../../oem/intermediaries/_oem-quotes-contacts/oem-quotes-contacts.entity';
+import { OemCustomersProducts } from '../../oem/intermediaries/_oem-customers-products/oem-customers-products.entity';
 
 @Injectable()
 export class SalesforceService {
@@ -49,6 +50,8 @@ export class SalesforceService {
     private hierarchyTreeRepo: TreeRepository<OemHierarchyEntity>,
     @InjectRepository(OemQuotesContacts)
     private quoteContactRepo: TreeRepository<OemQuotesContacts>,
+    @InjectRepository(OemCustomersProducts)
+    private customerProductRepo: TreeRepository<OemCustomersProducts>,
   ) {
     this.connection
       .login(SALESFORCE_USERNAME, SALESFORCE_PASSWORD)
@@ -236,15 +239,35 @@ export class SalesforceService {
     }
   }
 
-  public async createAsset(assetsBody: any[]) {
+  public async createAssets(assetsBody: any[]) {
     try {
       if (assetsBody.length) {
-        this.handleSFBulkCreateJob('Asset', 'upsert', assetsBody, null, {
-          extIdField: 'Vendori_Asset_Id__c',
-        });
+        this.handleSFBulkCreateJob(
+          'Asset',
+          'upsert',
+          assetsBody,
+          (id: string) => {
+            this.syncSFAssetId(id);
+          },
+          {
+            extIdField: 'Vendori_Asset_Id__c',
+          },
+        );
       }
     } catch (error) {
-      const functionName = this.createAsset.name;
+      const functionName = this.createAssets.name;
+
+      this._riseAPIError(functionName, error);
+    }
+  }
+
+  public async createSingleAsset(assetBody: any) {
+    try {
+      if (assetBody) {
+        return await this.connection.sobject('Asset').create(assetBody);
+      }
+    } catch (error) {
+      const functionName = this.createSingleAsset.name;
 
       this._riseAPIError(functionName, error);
     }
@@ -310,6 +333,16 @@ export class SalesforceService {
         },
       );
     }
+  }
+
+  private async syncSFAssetId(sfAssetId: string) {
+    if (!sfAssetId) return;
+    const res = await this.connection.sobject('Asset').retrieve(sfAssetId);
+    if (!res['Vendori_Asset_Id__c']) return;
+    await this.customerProductRepo.update(res['Vendori_Asset_Id__c'], {
+      sfAssetId: res.Id,
+      updatedAt: () => '"updated_at"',
+    });
   }
 
   private async syncSFQuoteId(sfQuoteId: string) {

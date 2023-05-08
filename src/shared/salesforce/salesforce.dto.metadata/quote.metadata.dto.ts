@@ -18,8 +18,8 @@ export class SfQuoteMetadataDto {
   opportunityId: string;
 
   /**
-   * The salesforce contract id. Used to sync assets
-   * @example 1
+   * The salesforce contract id
+   * @example 800DN0000000QcVYAU
    */
   @IsString()
   @IsOptional()

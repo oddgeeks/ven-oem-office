@@ -17,6 +17,7 @@ export class TenantMiddleware implements NestMiddleware {
         req.headers.host
       ).toString();
 
+      // console.log('source', source);
       const tenantName: string = source
         .split('.')[0]
         .toString()
@@ -24,6 +25,7 @@ export class TenantMiddleware implements NestMiddleware {
         .replace('undefined', '')
         .replace(/\:\d{1,4}/, '');
 
+      // console.log('TenantMiddleware/SetTenant', tenantName);
       set('tenant', tenantName);
 
       next();

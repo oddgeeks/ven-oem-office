@@ -1,7 +1,8 @@
 import { IsNotEmpty, IsNumber, Min, ValidateIf } from 'class-validator';
 import { Expose } from 'class-transformer';
+import { SfCustomerProductMetadataDto } from '../../../../shared/salesforce/salesforce.dto.metadata/customer-product.metadata.dto';
 
-export class CustomersProductsDto {
+export class CustomersProductsDto extends SfCustomerProductMetadataDto {
   /**
    * The id of Product
    * @example 1
